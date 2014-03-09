@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "CommonData.h"
 
 class Cube : public Object
 {
@@ -12,7 +13,7 @@ public:
 	void Render(const glm::mat4 &projection, const glm::mat4 &view);
 
 private:
-	static const glm::vec3 CubeVertices[];
+	static const Vertex CubeVertices[];
 
 	float angle;
 };
