@@ -99,6 +99,15 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shaders\default.frag" />
+    <None Include="resources\shaders\default.vert" />
+    <None Include="resources\shaders\textured.frag" />
+    <None Include="resources\shaders\textured.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\wooden_plank.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

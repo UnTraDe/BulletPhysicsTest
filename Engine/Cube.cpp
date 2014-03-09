@@ -110,21 +110,21 @@ Cube::Cube(int size) : Object()
 	if (mVbo == 0)
 	{
 		glGenBuffers(1, &mVbo);
-		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-	
+
 	if (mVao == 0)
 	{
 		glGenVertexArrays(1, &mVao);
-		glBindVertexArray(mVao);
-		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12);
-		glBindVertexArray(0);
+	glBindVertexArray(mVao);
+	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12);
+	glBindVertexArray(0);
 	}
-	
+
 	mModel = glm::mat4(1.0f);
 
 	mInstanceCounter += 1;

@@ -13,5 +13,8 @@ out float light;
 void main()
 {
     gl_Position =  (VP * Model) * vec4(position, 1.0f);
-	light = clamp(ambient + dot(normalize((Model * vec4(normal, 1.0f)).xyz), normalize(-lightDir)) * (1-ambient), 0, 1);
+
+	vec3 normalizedTransformedNormal = normalize((Model * vec4(normal, 1.0f)).xyz);
+	float diffuseIntensity = dot(normalizedTransformedNormal, normalize(-lightDir));
+	light = clamp(ambient + diffuseIntensity * (1-ambient), 0, 1);
 }
