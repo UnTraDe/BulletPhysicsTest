@@ -4,8 +4,14 @@ World::World(glm::mat4 projection)
 {
 	mProjection = projection;
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_CULL_FACE);
+}
+
+World::~World()
+{
+
+	
 }
 
 void World::Initialize()

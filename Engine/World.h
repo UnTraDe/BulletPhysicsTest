@@ -15,6 +15,8 @@ class World
 {
 public:
 	World(glm::mat4 projection);
+	~World();
+
 	void Initialize();
 
 	void Update(float deltaTime, GLFWwindow* window);
