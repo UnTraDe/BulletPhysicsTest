@@ -16,17 +16,18 @@ World::~World()
 
 void World::Initialize()
 {
+	ResourceManager* resources = ResourceManager::GetInstance();
 	//Load Shaders
-	mShaderManager.LoadShader("default.vert", "default.frag");
-	mShaderManager.LoadShader("textured.vert", "textured.frag");
+	resources->LoadShader("default.vert", "default.frag");
+	resources->LoadShader("textured.vert", "textured.frag");
 
 	//Load Textures
-	mTextureManager.LoadTexture("wooden_plank.jpg");
+	//resources->LoadTexture("wooden_plank.jpg");
 
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 0.0f, 2.0f));
 
-	Cube* cube1 = new Cube(mShaderManager.GetShader("default"), 10);
+	Cube* cube1 = new Cube(resources->GetShader("default"), 10);
 	mObjects.push_back(cube1);
 
 	/*

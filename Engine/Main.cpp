@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "World.h"
+#include "ResourceManager.h"
 
 int main(int argc, char const *argv[])
 {
@@ -22,6 +23,8 @@ int main(int argc, char const *argv[])
 	glewExperimental = true;
 	glewInit();
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+	ResourceManager::CreateInstance();
 
 	World* world = new World(glm::perspective(45.0f, 1024.0f / 768.0f, 0.1f, 1000.0f));
 	world->Initialize();

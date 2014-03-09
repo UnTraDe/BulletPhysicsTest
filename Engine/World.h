@@ -5,8 +5,7 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
-#include "ShaderManager.h"
-#include "TextureManager.h"
+#include "ResourceManager.h"
 #include "FPSCamera.h"
 #include "Cube.h"
 #include "Crate.h"
@@ -27,9 +26,6 @@ private:
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
 	std::vector<Object*> mObjects;
-
-	ShaderManager mShaderManager;
-	TextureManager mTextureManager;
 
 	void ProcessInput(float deltaTime, GLFWwindow* window);
 };
