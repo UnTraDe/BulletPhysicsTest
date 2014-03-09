@@ -6,7 +6,7 @@
 class Cube : public Object
 {
 public:
-	Cube(Shader* shader, int size);
+	Cube(int size);
 	~Cube();
 
 	void Update(float deltaTime);

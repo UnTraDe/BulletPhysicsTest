@@ -1,10 +1,8 @@
 #include "Object.h"
 #include "CommonData.h"
 
-Object::Object(Shader* shader)
+Object::Object()
 {
-	mShader = shader;
-
 	glGenVertexArrays(1, &mVao);
 	glGenBuffers(1, &mVbo);
 }

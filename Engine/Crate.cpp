@@ -40,7 +40,7 @@ const glm::vec3 Crate::CrateVertices[] = {
 };
 
 
-Crate::Crate(Shader* shader) : Object(shader)
+Crate::Crate() : Object()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(CrateVertices), CrateVertices, GL_STATIC_DRAW);
@@ -70,8 +70,12 @@ void Crate::Update(float deltaTime)
 
 void Crate::Render(const glm::mat4 &projection, const glm::mat4 &view)
 {
-	mShader->Bind();
-	GLuint mvpLocation = mShader->GetUniformLocation("MVP");
+	ResourceManager* resources = ResourceManager::GetInstance();
+	Shader *shader = resources->GetShader("default");
+
+	//TODO Use the new default shader
+	shader->Bind();
+	GLuint mvpLocation = shader->GetUniformLocation("MVP");
 
 	glm::mat4 model = glm::translate(mModel, mPosition);
 	glm::mat4 MVP = projection * view * model;

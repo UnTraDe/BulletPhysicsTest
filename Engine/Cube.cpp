@@ -100,7 +100,7 @@ const Vertex Cube::CubeVertices[] = {
 	Vertex{ glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }
 };
 
-Cube::Cube(Shader* shader, int size) : Object(shader)
+Cube::Cube(int size) : Object()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
@@ -129,9 +129,14 @@ void Cube::Update(float deltaTime)
 
 void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 {
-	mShader->Bind();
-	GLuint vpLocation = mShader->GetUniformLocation("VP");
-	GLuint modelLocation = mShader->GetUniformLocation("Model");
+	ResourceManager* resources = ResourceManager::GetInstance();
+
+	Shader *shader = resources->GetShader("default");
+
+	shader->Bind();
+
+	GLuint vpLocation = shader->GetUniformLocation("VP");
+	GLuint modelLocation = shader->GetUniformLocation("Model");
 
 	glm::mat4 model = glm::translate(mModel, mPosition);
 

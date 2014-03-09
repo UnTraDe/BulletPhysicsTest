@@ -3,7 +3,7 @@
 class Crate : Object
 {
 public:
-	Crate(Shader* shader);
+	Crate();
 	~Crate();
 
 	void Update(float deltaTime);

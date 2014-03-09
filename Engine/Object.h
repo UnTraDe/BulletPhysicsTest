@@ -4,12 +4,12 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <GL/glew.h>
-#include "Shader.h"
+#include "ResourceManager.h"
 
 class Object
 {
 public:
-	Object(Shader* shader);
+	Object();
 	virtual ~Object();
 
 	virtual void Update(float deltaTime) = 0;
@@ -26,5 +26,4 @@ protected:
 	glm::mat4 mModel;
 	GLuint mVbo;
 	GLuint mVao;
-	Shader* mShader;
 };
