@@ -84,8 +84,8 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	double y;
 	glfwGetCursorPos(window, &x, &y);
 
-	mCamera->AddVerticalAngle((float(wY / 2) - y) * 0.002f);
-	mCamera->AddHorizontalAngle((float(wX / 2) - x) * 0.002f);
+	mCamera->AddVerticalAngle((float)((wY / 2.0f) - y) * 0.002f);
+	mCamera->AddHorizontalAngle((float)((wX / 2.0f) - x) * 0.002f);
 	
 	glfwSetCursorPos(window, wX / 2, wY / 2);
 }
