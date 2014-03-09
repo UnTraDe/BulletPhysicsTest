@@ -2,13 +2,13 @@
 
 #include <glm/glm.hpp>
 
-struct SimpleVertex
+struct Vertex
 {
 	glm::vec3 position;
 	glm::vec3 normal;
 };
 
-struct SimpleTexturedVertex
+struct TexturedVertex
 {
 	glm::vec3 position;
 	glm::vec3 normal;

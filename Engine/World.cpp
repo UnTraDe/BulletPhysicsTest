@@ -21,7 +21,7 @@ void World::Initialize()
 	mShaderManager.LoadShader("textured.vert", "textured.frag");
 
 	//Load Textures
-	mTextureManager.LoadTexture("wooden_plank.jpg");
+	//mTextureManager.LoadTexture("wooden_plank.jpg");
 
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 0.0f, 2.0f));
