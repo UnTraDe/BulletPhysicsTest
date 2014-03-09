@@ -114,7 +114,7 @@ Cube::Cube(int size) : Object()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12);
 	glBindVertexArray(0);
 
-	mModel = glm::mat4(1.0f);
+	mModel = glm::scale(glm::vec3(size));
 }
 
 Cube::~Cube()

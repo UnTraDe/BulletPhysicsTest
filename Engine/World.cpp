@@ -27,7 +27,7 @@ void World::Initialize()
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 0.0f, 2.0f));
 
-	Cube* cube1 = new Cube(10);
+	Cube* cube1 = new Cube(2);
 	mObjects.push_back(cube1);
 
 	/*
