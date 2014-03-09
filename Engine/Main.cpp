@@ -21,11 +21,12 @@ int main(int argc, char const *argv[])
 
 	glewExperimental = true;
 	glewInit();
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	World* world = new World(glm::perspective(45.0f, 1024.0f / 768.0f, 0.1f, 1000.0f));
 	world->Initialize();
 
-    while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
 		world->Update(0, window); //TODO Pass an acutal timestep delta
 		world->Render();
