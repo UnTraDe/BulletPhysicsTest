@@ -5,6 +5,8 @@
 #include "World.h"
 #include "ResourceManager.h"
 
+#include "bullet/btBulletDynamicsCommon.h"
+
 int main(int argc, char const *argv[])
 {
     if (!glfwInit())
@@ -28,6 +30,8 @@ int main(int argc, char const *argv[])
 
 	World* world = new World(glm::perspective(45.0f, 1024.0f / 768.0f, 0.1f, 1000.0f));
 	world->Initialize();
+
+	btBoxShape* box = new btBoxShape(btVector3(1, 1, 1));
 
 	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
