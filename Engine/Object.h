@@ -24,6 +24,4 @@ protected:
 	glm::vec3 mPosition;
 	std::vector<glm::vec3> mVertices;
 	glm::mat4 mModel;
-	GLuint mVbo;
-	GLuint mVao;
 };

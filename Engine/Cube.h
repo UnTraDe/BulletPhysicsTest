@@ -14,6 +14,9 @@ public:
 
 private:
 	static const Vertex CubeVertices[];
+	static GLuint mVao;
+	static GLuint mVbo;
+	static int mInstanceCounter;
 
 	float angle;
 };

@@ -30,6 +30,10 @@ void World::Initialize()
 	Cube* cube1 = new Cube(10);
 	mObjects.push_back(cube1);
 
+	Cube* cube2 = new Cube(10);
+	cube2->SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
+	mObjects.push_back(cube2);
+
 	/*
 	RenderBatch* objectsBatch = new RenderBatch(&mDefaultShader);
 	objectsBatch->AddObject(cube1);
