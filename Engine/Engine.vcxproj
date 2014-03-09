@@ -90,6 +90,7 @@
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommonData.h" />
     <ClInclude Include="Crate.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="FPSCamera.h" />
