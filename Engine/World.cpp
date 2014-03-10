@@ -51,15 +51,15 @@ void World::Initialize()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mDynamicsWorld->addRigidBody(groundRigidBody);
 
-	glm::vec3 color(1.0f, 1.0f, 0.0f);
+	
 
-	Cube* cube1 = new Cube(color);
-	mObjects.push_back(cube1);
-	mDynamicsWorld->addRigidBody(cube1->GetRigidBody());
-
-	Cube* cube2 = new Cube(color);
-	mObjects.push_back(cube2);
-	mDynamicsWorld->addRigidBody(cube2->GetRigidBody());
+	for (int i = 0; i < 100; i++)
+	{
+		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
+		Cube* cube = new Cube(color);
+		mObjects.push_back(cube);
+		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
+	}
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
