@@ -105,7 +105,7 @@ GLuint Cube::mVao = 0;
 GLuint Cube::mVbo = 0;
 btCollisionShape* Cube::mShape = nullptr;
 
-Cube::Cube(int size) : Object()
+Cube::Cube(glm::vec3 color)
 {
 	if (mInstanceCounter == 0)
 	{
@@ -123,6 +123,9 @@ Cube::Cube(int size) : Object()
 
 		mShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
 	}
+
+	//Properties
+	mColor = color;
 
 	//Physics
 	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
@@ -167,6 +170,7 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 
 	GLuint vpLocation = shader->GetUniformLocation("VP");
 	GLuint modelLocation = shader->GetUniformLocation("Model");
+	GLuint colorLocation = shader->GetUniformLocation("normalColor");
 	
 	btTransform trans;
 	mRigidBody->getMotionState()->getWorldTransform(trans);
@@ -179,6 +183,7 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
+	glUniform3fv(colorLocation, 1, &mColor[0]);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

@@ -51,13 +51,13 @@ void World::Initialize()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mDynamicsWorld->addRigidBody(groundRigidBody);
 
-	
+	glm::vec3 color(1.0f, 1.0f, 0.0f);
 
-	Cube* cube1 = new Cube(1);
+	Cube* cube1 = new Cube(color);
 	mObjects.push_back(cube1);
 	mDynamicsWorld->addRigidBody(cube1->GetRigidBody());
 
-	Cube* cube2 = new Cube(1);
+	Cube* cube2 = new Cube(color);
 	mObjects.push_back(cube2);
 	mDynamicsWorld->addRigidBody(cube2->GetRigidBody());
 }

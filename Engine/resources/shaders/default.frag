@@ -1,10 +1,12 @@
 #version 330 core
 
+uniform vec3 normalColor;
+
 in float light;
 
 out vec3 color;
 
 void main()
 {
-	color = vec3(0.0f, 1.0f, 0.0f) * light;
+	color = normalColor * light;
 }

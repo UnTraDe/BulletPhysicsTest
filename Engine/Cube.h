@@ -4,12 +4,11 @@
 #include "Object.h"
 #include "CommonData.h"
 
-#include <iostream>
 
 class Cube : public Object
 {
 public:
-	Cube(int size);
+	Cube(glm::vec3 color);
 	~Cube();
 
 	void Update(float deltaTime);
@@ -19,6 +18,9 @@ private:
 	static const Vertex CubeVertices[];
 	static GLuint mVao;
 	static GLuint mVbo;
+
+	//Properties
+	glm::vec3 mColor;
 
 	//Physics
 	static btCollisionShape* mShape;
