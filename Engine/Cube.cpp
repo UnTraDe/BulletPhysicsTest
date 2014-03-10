@@ -105,7 +105,7 @@ GLuint Cube::mVao = 0;
 GLuint Cube::mVbo = 0;
 
 
-Cube::Cube(int size) : Object()
+Cube::Cube(int size, btDiscreteDynamicsWorld* dynamicsWorld) : Object()
 {
 	if (mVbo == 0)
 	{
@@ -128,6 +128,18 @@ Cube::Cube(int size) : Object()
 	mModel = glm::mat4(1.0f);
 
 	mInstanceCounter += 1;
+
+	//Physics
+	btCollisionShape* fallShape = new btSphereShape(1);
+	btDefaultMotionState* fallMotionState =
+		new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+
+	btScalar mass = 1;
+	btVector3 fallInertia(0, 0, 0);
+	fallShape->calculateLocalInertia(mass, fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, fallShape, fallInertia);
+	fallRigidBody = new btRigidBody(fallRigidBodyCI);
+	dynamicsWorld->addRigidBody(fallRigidBody);
 }
 
 Cube::~Cube()
@@ -145,6 +157,9 @@ void Cube::Update(float deltaTime)
 {
 	//mModel = glm::rotate(mModel, 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	
+
+
+	
 }
 
 void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
@@ -157,12 +172,17 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 
 	GLuint vpLocation = shader->GetUniformLocation("VP");
 	GLuint modelLocation = shader->GetUniformLocation("Model");
-
-	angle++;
-
+	
+	btTransform trans;
+	fallRigidBody->getMotionState()->getWorldTransform(trans);
+	btVector3 v = trans.getOrigin();
+	//trans.getRotation();
+	
+	glm::vec3 pos(v.getX(), v.getY(), v.getZ());
+	
 	//glm::mat4 transformation = glm::rotate(20.0f , glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(mPosition);
-	mModel = mModel * glm::rotate(1.0f, glm::vec3(0.0f, 1.0f, 1.0f));
-	glm::mat4 model = glm::translate(mPosition) * mModel;
+	//mModel = mModel * glm::rotate(1.0f, glm::vec3(0.0f, 1.0f, 1.0f));
+	glm::mat4 model = glm::translate(pos) * mModel;
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);

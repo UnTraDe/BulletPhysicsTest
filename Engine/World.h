@@ -4,11 +4,13 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 #include "ResourceManager.h"
 #include "FPSCamera.h"
 #include "Cube.h"
 #include "Crate.h"
+
 
 class World
 {
@@ -23,9 +25,11 @@ public:
 	
 
 private:
+	void ProcessInput(float deltaTime, GLFWwindow* window);
+
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
 	std::vector<Object*> mObjects;
 
-	void ProcessInput(float deltaTime, GLFWwindow* window);
+	btDiscreteDynamicsWorld* dynamicsWorld;
 };
