@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bullet/btBulletDynamicsCommon.h>
+
 #include "Object.h"
 #include "CommonData.h"
 
@@ -9,7 +9,7 @@
 class Cube : public Object
 {
 public:
-	Cube(int size, btDiscreteDynamicsWorld* dynamicsWorld);
+	Cube(int size);
 	~Cube();
 
 	void Update(float deltaTime);
@@ -19,7 +19,9 @@ private:
 	static const Vertex CubeVertices[];
 	static GLuint mVao;
 	static GLuint mVbo;
-	static int mInstanceCounter;
 
-	btRigidBody* fallRigidBody;
+	//Physics
+	static btCollisionShape* mShape;
+
+	static int mInstanceCounter;
 };

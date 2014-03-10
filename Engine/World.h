@@ -31,5 +31,10 @@ private:
 	glm::mat4 mProjection;
 	std::vector<Object*> mObjects;
 
-	btDiscreteDynamicsWorld* dynamicsWorld;
+	//Physics
+	btBroadphaseInterface* mBroadphase;
+	btDefaultCollisionConfiguration* mCollisionConfiguration;
+	btCollisionDispatcher* mDispatcher;
+	btSequentialImpulseConstraintSolver* mSolver;
+	btDiscreteDynamicsWorld* mDynamicsWorld;
 };

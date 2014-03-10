@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <GL/glew.h>
+#include <bullet/btBulletDynamicsCommon.h>
 #include "ResourceManager.h"
 
 class Object
@@ -17,11 +18,15 @@ public:
 
 	glm::vec3 GetPosition() { return mPosition; };
 	void SetPosition(glm::vec3 position) { mPosition = position; };
-	std::vector<glm::vec3>* GetVertices() { return &mVertices; };
-	glm::mat4 GetModelMatrix() { return mModel; };
+	
+	btRigidBody* GetRigidBody() { return mRigidBody; }
+
 
 protected:
 	glm::vec3 mPosition;
 	std::vector<glm::vec3> mVertices;
-	glm::mat4 mModel;
+
+	//- Physics -
+	btDefaultMotionState* mMotionState;
+	btRigidBody* mRigidBody;
 };
