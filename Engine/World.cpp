@@ -95,26 +95,27 @@ void World::Render()
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
 {
 	float speed = 0.1f;
-	btVector3 vel = player->GetRigidBody()->getLinearVelocity();
+	btVector3 vel = btVector3(0,0,0);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		vel.setX(sinf(mCamera->GetHorizontalAngle()) * 7.0);
-		vel.setZ(cosf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle()) * 7.0);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		vel.setX(-sinf(mCamera->GetHorizontalAngle()) * 7.0);
-		vel.setZ(-cosf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setX(vel.getX() - sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(vel.getZ() - cosf(mCamera->GetHorizontalAngle()) * 7.0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		vel.setX(sinf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
-		vel.setZ(cosf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		vel.setX(sinf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
-		vel.setZ(cosf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
 	}
+	vel.setY(player->GetRigidBody()->getLinearVelocity().getY());
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		vel.setY(4.0);
