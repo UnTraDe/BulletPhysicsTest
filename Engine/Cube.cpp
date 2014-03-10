@@ -173,12 +173,17 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	fallRigidBody->getMotionState()->getWorldTransform(trans);
 	btVector3 v = trans.getOrigin();
 	
-	glm::quat q(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
+	glm::mat4 m;
+
+	trans.getOpenGLMatrix((btScalar*)&m);
+
+	glm::quat q(glm::radians(trans.getRotation().getX()), glm::radians(trans.getRotation().getY()), glm::radians(trans.getRotation().getZ()), glm::radians(trans.getRotation().getW()));
 	glm::vec3 pos(v.getX(), v.getY(), v.getZ());
 	
 	std::cout << trans.getRotation().getAngle() << std::endl;
 
-	glm::mat4 model = glm::translate(pos) * glm::toMat4(q) * mModel;
+	//glm::mat4 model = glm::translate(pos) * glm::toMat4(q) * mModel;
+	glm::mat4 model = m * mModel;
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
