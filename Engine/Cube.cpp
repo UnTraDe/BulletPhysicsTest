@@ -170,6 +170,7 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 
 	GLuint vpLocation = shader->GetUniformLocation("VP");
 	GLuint modelLocation = shader->GetUniformLocation("Model");
+	GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
 	GLuint colorLocation = shader->GetUniformLocation("normalColor");
 	
 	btTransform trans;
@@ -183,6 +184,7 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-glm::vec3(v.getX(), v.getY(), v.getZ())))[0][0]);
 	glUniform3fv(colorLocation, 1, &mColor[0]);
 
 	glEnableVertexAttribArray(0);
