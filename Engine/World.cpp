@@ -57,6 +57,7 @@ void World::Initialize()
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		Cube* cube = new Cube(color);
+		cube->SetPosition(glm::vec3(i % 10, 50, i / 10) * 1.1f);
 		mObjects.push_back(cube);
 		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
 	}
