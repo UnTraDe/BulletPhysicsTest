@@ -4,6 +4,8 @@
 #include "Object.h"
 #include "CommonData.h"
 
+#include <iostream>
+
 class Cube : public Object
 {
 public:

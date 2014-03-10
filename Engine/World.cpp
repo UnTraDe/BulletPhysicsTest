@@ -51,8 +51,9 @@ void World::Initialize()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	dynamicsWorld->addRigidBody(groundRigidBody);
 
+
 	//Create Camera
-	mCamera = new FPSCamera(glm::vec3(0.0f, 0.0f, 2.0f));
+	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));
 
 	Cube* cube1 = new Cube(1, dynamicsWorld);
 	mObjects.push_back(cube1);

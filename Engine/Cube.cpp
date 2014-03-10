@@ -130,7 +130,7 @@ Cube::Cube(int size, btDiscreteDynamicsWorld* dynamicsWorld) : Object()
 	mInstanceCounter += 1;
 
 	//Physics
-	btCollisionShape* fallShape = new btSphereShape(1);
+	btCollisionShape* fallShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
 	btDefaultMotionState* fallMotionState =
 		new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
 
@@ -155,10 +155,6 @@ Cube::~Cube()
 
 void Cube::Update(float deltaTime)
 {
-	//mModel = glm::rotate(mModel, 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	
-
-
 	
 }
 
@@ -176,13 +172,13 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	btTransform trans;
 	fallRigidBody->getMotionState()->getWorldTransform(trans);
 	btVector3 v = trans.getOrigin();
-	//trans.getRotation();
 	
+	glm::quat q(trans.getRotation().getX(), trans.getRotation().getY(), trans.getRotation().getZ(), trans.getRotation().getW());
 	glm::vec3 pos(v.getX(), v.getY(), v.getZ());
 	
-	//glm::mat4 transformation = glm::rotate(20.0f , glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(mPosition);
-	//mModel = mModel * glm::rotate(1.0f, glm::vec3(0.0f, 1.0f, 1.0f));
-	glm::mat4 model = glm::translate(pos) * mModel;
+	std::cout << trans.getRotation().getAngle() << std::endl;
+
+	glm::mat4 model = glm::translate(pos) * glm::toMat4(q) * mModel;
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
