@@ -16,7 +16,7 @@ public:
 	virtual void Update(float deltaTime) = 0;
 	virtual void Render(const glm::mat4 &projection, const glm::mat4 &view) = 0;
 
-	glm::vec3 GetPosition() { return glm::vec3(transform.getOrigin().getX(), transform.getOrigin().getY(), transform.getOrigin().getZ()); };
+	glm::vec3 GetPosition() { mMotionState->getWorldTransform(transform); return glm::vec3(transform.getOrigin().getX(), transform.getOrigin().getY(), transform.getOrigin().getZ()); };
 	void SetPosition(glm::vec3 position) { mRigidBody->setWorldTransform(btTransform(btQuaternion(0,0,0,1), btVector3(position.x, position.y, position.z))); };
 	
 	btRigidBody* GetRigidBody() { return mRigidBody; }

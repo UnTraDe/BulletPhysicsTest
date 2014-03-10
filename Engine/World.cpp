@@ -49,9 +49,8 @@ void World::Initialize()
 	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	groundRigidBody->setFriction(5.0);
 	mDynamicsWorld->addRigidBody(groundRigidBody);
-
-	
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -61,6 +60,10 @@ void World::Initialize()
 		mObjects.push_back(cube);
 		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
 	}
+
+	player = new Player();
+	mObjects.push_back(player);
+	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
@@ -72,7 +75,8 @@ void World::Update(float deltaTime, GLFWwindow* window)
 		(*it)->Update(deltaTime);
 	}
 	
-	ProcessInput(deltaTime, window);	
+	mCamera->SetPosition(this->player->GetPosition());
+	ProcessInput(deltaTime, window);
 	mCamera->Update();
 }
 
@@ -91,19 +95,31 @@ void World::Render()
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
 {
 	float speed = 0.1f;
+	btVector3 vel = player->GetRigidBody()->getLinearVelocity();
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		mCamera->MoveForward(speed);
-
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		vel.setX(sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(cosf(mCamera->GetHorizontalAngle()) * 7.0);
+	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		mCamera->MoveBackward(speed);
+	{
+		vel.setX(-sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(-cosf(mCamera->GetHorizontalAngle()) * 7.0);
+	}
 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		mCamera->MoveLeft(speed);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		vel.setX(sinf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+		vel.setZ(cosf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		vel.setX(sinf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+		vel.setZ(cosf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+	}
 
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		mCamera->MoveRight(speed);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		vel.setY(4.0);
 
+	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;
 	int wY;
 	glfwGetWindowSize(window, &wX, &wY);

@@ -9,9 +9,9 @@
 
 #include "ResourceManager.h"
 #include "FPSCamera.h"
+#include "Player.h"
 #include "Cube.h"
 #include "Crate.h"
-
 
 class World
 {
@@ -30,6 +30,7 @@ private:
 
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
+	Player *player;
 	std::vector<Object*> mObjects;
 
 	//Physics
