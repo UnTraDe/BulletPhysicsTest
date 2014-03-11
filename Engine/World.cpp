@@ -5,7 +5,7 @@ World::World(glm::mat4 projection)
 	mProjection = projection;
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 }
 
 World::~World()
@@ -24,10 +24,14 @@ void World::Initialize()
 	ResourceManager* resources = ResourceManager::GetInstance();
 	//Load Shaders
 	resources->LoadShader("default.vert", "default.frag");
-	resources->LoadShader("textured.vert", "textured.frag");
+	//resources->LoadShader("textured.vert", "textured.frag");
+	resources->LoadShader("simple.vert", "simple.frag");
 
 	//Load Textures
 	//resources->LoadTexture("wooden_plank.jpg");
+
+	//Load Map
+	resources->LoadHeightmap("heightmap.jpg");
 
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));
@@ -51,9 +55,10 @@ void World::Initialize()
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	mDynamicsWorld->addRigidBody(groundRigidBody);
 
-	
 
-	for (int i = 0; i < 100; i++)
+	mTerrain = new Terrain(resources->GetHeightmap("heightmap.jpg"));
+
+	for (int i = 0; i < 0; i++)
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		Cube* cube = new Cube(color);
@@ -66,6 +71,8 @@ void World::Initialize()
 void World::Update(float deltaTime, GLFWwindow* window)
 {
 	mDynamicsWorld->stepSimulation(1 / 60.f, 10);
+
+	mTerrain->Update(deltaTime);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
@@ -81,6 +88,8 @@ void World::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = mCamera->GetView();
+
+	mTerrain->Render(mProjection, view);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{

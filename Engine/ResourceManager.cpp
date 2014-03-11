@@ -1,5 +1,10 @@
 #include "ResourceManager.h"
 
+#include <CImg.h>
+
+using namespace cimg_library;
+
+
 ResourceManager* ResourceManager::mInstance = nullptr;
 
 void ResourceManager::CreateInstance()
@@ -50,4 +55,33 @@ void ResourceManager::LoadShader(const std::string &vertex, const std::string &f
 	std::getline(s, keyName, '.');
 
 	mShaders[keyName] = shader;
+}
+
+void ResourceManager::LoadHeightmap(const std::string &name)
+{
+	/*
+	std::string location(HEIGHTMAPS_BASE_PATH);
+	location.append(name);
+	*/
+
+	std::string location(name);
+
+	CImg<unsigned char> src("heightmap.bmp");
+	int width = src.width();
+	int height = src.height();
+
+	HeightMap* hs = new HeightMap(width, height);
+
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			unsigned char* ptr = src.data(i, j, 0, 0);
+			unsigned char pixel = *ptr;
+			
+			hs->SetHeight(i, j, (pixel / 255.0f));
+		}
+	}
+
+	mHeightMaps[name] = hs;
 }

@@ -71,6 +71,8 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathFragment)
 
     glShaderSource(mFragmentShaderObj, 1, &vF, NULL);
 
+	//assert(mVertexShaderObj != 4);
+
     glCompileShader(mVertexShaderObj);
 
     GLint Result;

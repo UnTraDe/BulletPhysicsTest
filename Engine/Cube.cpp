@@ -114,8 +114,11 @@ Cube::Cube(glm::vec3 color)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
+
 		glGenVertexArrays(1, &mVao);
 		glBindVertexArray(mVao);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12);
@@ -187,13 +190,7 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-glm::vec3(v.getX(), v.getY(), v.getZ())))[0][0]);
 	glUniform3fv(colorLocation, 1, &mColor[0]);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-
 	glBindVertexArray(mVao);
 
 	glDrawArrays(GL_TRIANGLES, 0, (sizeof(CubeVertices) / (sizeof(GLfloat) * 6)));
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
 }

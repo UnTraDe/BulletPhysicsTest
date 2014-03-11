@@ -11,7 +11,7 @@
 #include "FPSCamera.h"
 #include "Cube.h"
 #include "Crate.h"
-
+#include "Terrain.h"
 
 class World
 {
@@ -38,4 +38,7 @@ private:
 	btCollisionDispatcher* mDispatcher;
 	btSequentialImpulseConstraintSolver* mSolver;
 	btDiscreteDynamicsWorld* mDynamicsWorld;
+
+	//Temp
+	Terrain* mTerrain;
 };

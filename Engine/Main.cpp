@@ -5,13 +5,22 @@
 #include "World.h"
 #include "ResourceManager.h"
 
+void error_callback(int error, const char* description)
+{
+	fputs(description, stderr);
+	std::cout << std::endl;
+	system("pause");
+}
+
 int main(int argc, char const *argv[])
 {
     if (!glfwInit())
         return -1;
 
+	glfwSetErrorCallback(error_callback);
+
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", NULL, NULL);
-	
+
     if (!window)
     {
         glfwTerminate();
