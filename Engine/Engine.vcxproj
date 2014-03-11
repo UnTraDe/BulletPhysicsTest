@@ -83,6 +83,7 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="World.h" />

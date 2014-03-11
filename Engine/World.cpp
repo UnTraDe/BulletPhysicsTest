@@ -24,8 +24,6 @@ void World::Initialize()
 	ResourceManager* resources = ResourceManager::GetInstance();
 	//Load Shaders
 	resources->LoadShader("default.vert", "default.frag");
-	//resources->LoadShader("textured.vert", "textured.frag");
-	resources->LoadShader("simple.vert", "simple.frag");
 
 	//Load Textures
 	//resources->LoadTexture("wooden_plank.jpg");
