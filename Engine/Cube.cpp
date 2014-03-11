@@ -1,55 +1,5 @@
 #include "Cube.h"
 
-/*const glm::vec3 Cube::CubeVertices[] = {
-	//Left
-	glm::vec3(- 1.0f, -1.0f, -1.0f),
-	glm::vec3(- 1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-
-	//Front
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-
-	//Bottom
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, -1.0f),
-
-	//Back
-	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, -1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-
-	//Right
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, -1.0f, -1.0f),
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, -1.0f, 1.0f),
-
-	//Top
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(1.0f, 1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-	glm::vec3(1.0f, 1.0f, 1.0f),
-	glm::vec3(-1.0f, 1.0f, -1.0f),
-	glm::vec3(-1.0f, 1.0f, 1.0f)
-};*/
-
 const Vertex Cube::CubeVertices[] = {
 	//Left
 	Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-0.5f, 0.0f, 0.0f) },
@@ -138,7 +88,7 @@ Cube::Cube(glm::vec3 color)
 	mShape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);
 	mRigidBody = new btRigidBody(rigidBodyCI);
-	
+	mRigidBody->setFriction(5.0);
 	mInstanceCounter += 1;
 }
 

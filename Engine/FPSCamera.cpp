@@ -36,6 +36,11 @@ void FPSCamera::MoveRight(float amount)
 
 void FPSCamera::Update()
 {
+	if (mVerticalAngle < glm::radians(-89.0))
+		mVerticalAngle = glm::radians(-89.0);
+	if (mVerticalAngle > glm::radians(89.0))
+		mVerticalAngle = glm::radians(89.0);
+
 	mDirection.x = glm::cos(mVerticalAngle) * glm::sin(mHorizontalAngle);
 	mDirection.y = glm::sin(mVerticalAngle);
 	mDirection.z = glm::cos(mVerticalAngle) * glm::cos(mHorizontalAngle);

@@ -20,6 +20,7 @@ public:
 	float GetHorizontalAngle() { return mHorizontalAngle; };
 	float GetVerticalAngle() { return mVerticalAngle; };
 	glm::vec3 GetPosition() { return mPosition; };
+	glm::vec3 GetDirection() { return mDirection; };
 
 	void MoveForward(float amount);
 	void MoveBackward(float amount);

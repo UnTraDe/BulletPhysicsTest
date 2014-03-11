@@ -5,7 +5,7 @@ World::World(glm::mat4 projection)
 	mProjection = projection;
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 }
 
 World::~World()
@@ -30,9 +30,6 @@ void World::Initialize()
 	//Load Textures
 	//resources->LoadTexture("wooden_plank.jpg");
 
-	//Load Map
-	resources->LoadHeightmap("heightmap.jpg");
-
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));
 
@@ -53,12 +50,10 @@ void World::Initialize()
 	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+	groundRigidBody->setFriction(5.0);
 	mDynamicsWorld->addRigidBody(groundRigidBody);
 
-
-	mTerrain = new Terrain(resources->GetHeightmap("heightmap.jpg"));
-
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		Cube* cube = new Cube(color);
@@ -66,19 +61,22 @@ void World::Initialize()
 		mObjects.push_back(cube);
 		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
 	}
+
+	player = new Player();
+	mObjects.push_back(player);
+	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
 {
 	mDynamicsWorld->stepSimulation(1 / 60.f, 10);
 
-	mTerrain->Update(deltaTime);
-
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
 		(*it)->Update(deltaTime);
 	}
 	
+	mCamera->SetPosition(this->player->GetPosition());
 	ProcessInput(deltaTime, window);	
 	mCamera->Update();
 }
@@ -89,8 +87,6 @@ void World::Render()
 
 	glm::mat4 view = mCamera->GetView();
 
-	mTerrain->Render(mProjection, view);
-
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
 		(*it)->Render(mProjection, view);
@@ -100,19 +96,32 @@ void World::Render()
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
 {
 	float speed = 0.1f;
+	btVector3 vel = btVector3(0,0,0);
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		mCamera->MoveForward(speed);
-
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle()) * 7.0);
+	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		mCamera->MoveBackward(speed);
+	{
+		vel.setX(vel.getX() - sinf(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setZ(vel.getZ() - cosf(mCamera->GetHorizontalAngle()) * 7.0);
+	}
 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		mCamera->MoveLeft(speed);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		vel.setX(vel.getX() + sinf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+		vel.setZ(vel.getZ() + cosf(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+	}
+	vel.setY(player->GetRigidBody()->getLinearVelocity().getY());
 
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		mCamera->MoveRight(speed);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		vel.setY(4.0);
 
+	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;
 	int wY;
 	glfwGetWindowSize(window, &wX, &wY);
