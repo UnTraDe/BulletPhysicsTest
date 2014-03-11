@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Cube.h"
 #include "Crate.h"
+#include "Bullet.h"
 
 class World
 {
@@ -32,6 +33,7 @@ private:
 	glm::mat4 mProjection;
 	Player *player;
 	std::vector<Object*> mObjects;
+	double lastShot;
 
 	//Physics
 	btBroadphaseInterface* mBroadphase;

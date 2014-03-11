@@ -1,5 +1,5 @@
 #version 330 core
-uniform float ambient = 0.5;
+uniform float ambient = 0.65;
 uniform vec3 lightDir = vec3(1.0f, -3.0f, 2.0f);
 
 uniform mat4 Model;

@@ -21,7 +21,6 @@ public:
 	
 	btRigidBody* GetRigidBody() { return mRigidBody; }
 
-
 protected:
 	btTransform transform;
 	std::vector<glm::vec3> mVertices;

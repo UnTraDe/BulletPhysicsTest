@@ -14,6 +14,7 @@ Player::Player()
 	mRigidBody = new btRigidBody(rigidBodyCI);
 	mRigidBody->setSleepingThresholds(0.0, 0.0);
 	mRigidBody->setAngularFactor(0.0);
+	mRigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 

@@ -10,8 +10,9 @@ int main(int argc, char const *argv[])
     if (!glfwInit())
         return -1;
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Engine", NULL, NULL);
-	
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "Engine", NULL, NULL);
+
     if (!window)
     {
         glfwTerminate();
@@ -23,10 +24,10 @@ int main(int argc, char const *argv[])
 	glewExperimental = true;
 	glewInit();
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
+	glClearColor(0.53, 0.81, 0.98, 1);
 	ResourceManager::CreateInstance();
 
-	World* world = new World(glm::perspective(45.0f, 1024.0f / 768.0f, 0.1f, 1000.0f));
+	World* world = new World(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 1000.0f));
 	world->Initialize();
 
 	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

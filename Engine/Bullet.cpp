@@ -1,6 +1,6 @@
-#include "Cube.h"
+#include "Bullet.h"
 
-const Vertex Cube::CubeVertices[] = {
+const Vertex Bullet::CubeVertices[] = {
 	//Left
 	Vertex{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-0.5f, 0.0f, 0.0f) },
 	Vertex{ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(-0.5f, 0.0f, 0.0f) },
@@ -50,12 +50,12 @@ const Vertex Cube::CubeVertices[] = {
 	Vertex{ glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.5f, 0.0f) }
 };
 
-int Cube::mInstanceCounter = 0;
-GLuint Cube::mVao = 0;
-GLuint Cube::mVbo = 0;
-btCollisionShape* Cube::mShape = nullptr;
+int Bullet::mInstanceCounter = 0;
+GLuint Bullet::mVao = 0;
+GLuint Bullet::mVbo = 0;
+btCollisionShape* Bullet::mShape = nullptr;
 
-Cube::Cube(glm::vec3 color)
+Bullet::Bullet()
 {
 	if (mInstanceCounter == 0)
 	{
@@ -63,33 +63,30 @@ Cube::Cube(glm::vec3 color)
 		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), CubeVertices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
+
 		glGenVertexArrays(1, &mVao);
 		glBindVertexArray(mVao);
 		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*)0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*)12);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*) 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*) 12);
 		glBindVertexArray(0);
 
-		mShape = new btBoxShape(btVector3(0.5f, 0.5f, 0.5f));
+		mShape = new btSphereShape(0.2f);
 	}
-
-	//Properties
-	mColor = color;
-
-	//Physics
-	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 50, 0)));
+	
+	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0)));
 
 	btScalar mass = 5;
 	btVector3 inertia(0, 0, 0);
 	mShape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);
 	mRigidBody = new btRigidBody(rigidBodyCI);
-	mRigidBody->setFriction(5.0);
-	mInstanceCounter += 1;
+	mRigidBody->setCcdMotionThreshold(0.01f);
+	mInstanceCounter++;
 }
 
-Cube::~Cube()
+
+Bullet::~Bullet()
 {
 	mInstanceCounter--;
 
@@ -106,12 +103,12 @@ Cube::~Cube()
 	}
 }
 
-void Cube::Update(float deltaTime)
+void Bullet::Update(float deltaTime)
 {
-	
+
 }
 
-void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
+void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view)
 {
 	ResourceManager* resources = ResourceManager::GetInstance();
 	Shader *shader = resources->GetShader("default");
@@ -122,20 +119,20 @@ void Cube::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	GLuint modelLocation = shader->GetUniformLocation("Model");
 	GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
 	GLuint colorLocation = shader->GetUniformLocation("normalColor");
-	
+
 	btTransform trans;
 	mRigidBody->getMotionState()->getWorldTransform(trans);
 	btVector3 v = trans.getOrigin();
-	
-	glm::mat4 m;
-	trans.getOpenGLMatrix((btScalar*)&m);
 
-	glm::mat4 model = m * glm::mat4(1.0f);
+	glm::mat4 m;
+	trans.getOpenGLMatrix((btScalar*) &m);
+
+	glm::mat4 model = m * glm::scale(glm::vec3(0.2f));
 
 	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-glm::vec3(v.getX(), v.getY(), v.getZ())))[0][0]);
-	glUniform3fv(colorLocation, 1, &mColor[0]);
+	glUniform3fv(colorLocation, 1, &(glm::vec3(0,0,0))[0]);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

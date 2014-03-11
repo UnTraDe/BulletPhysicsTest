@@ -75,7 +75,7 @@ void World::Update(float deltaTime, GLFWwindow* window)
 		(*it)->Update(deltaTime);
 	}
 	
-	mCamera->SetPosition(this->player->GetPosition());
+	mCamera->SetPosition(this->player->GetPosition() + glm::vec3(0, 0.6f, 0));
 	ProcessInput(deltaTime, window);
 	mCamera->Update();
 }
@@ -119,7 +119,17 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		vel.setY(4.0);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetTime() - lastShot > 0.2)
+	{
+		lastShot = glfwGetTime();
+		glm::vec3 dir = mCamera->GetDirection();
 
+		Bullet* bullet = new Bullet();
+		bullet->SetPosition(mCamera->GetPosition() + glm::normalize(mCamera->GetDirection() * 2.0f));
+		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z) * 50.0);
+		mObjects.push_back(bullet);
+		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
+	}
 	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;
 	int wY;
