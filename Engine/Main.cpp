@@ -37,9 +37,24 @@ int main(int argc, char const *argv[])
 
 	World* world = new World(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 1000.0f));
 	world->Initialize();
+	int frames = 0;
+	double lastFrame = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
+		frames++;
+		if (glfwGetTime() - lastFrame >= 1.0)
+		{
+			char str[4];
+			memset(str, 0, sizeof(str));
+			itoa(frames, str, 10);
+
+			std::string s = "Engine - ";
+			s.append(str);
+			glfwSetWindowTitle(window, s.c_str());
+			lastFrame = glfwGetTime();
+			frames = 0;
+		}
 		world->Update(0, window); //TODO Pass an acutal timestep delta
 		world->Render();
 
