@@ -6,6 +6,8 @@
 #include <string>
 #include <GL/glew.h>
 
+#include <assert.h>
+
 
 class Shader 
 {
@@ -16,6 +18,7 @@ public:
     void Bind();
     void Release();
     GLuint GetUniformLocation(const char* name);
+	GLuint GetProgram() { return mProgram; };
 
 private:
     GLuint mProgram;
