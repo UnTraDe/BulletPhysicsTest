@@ -76,7 +76,7 @@ Bullet::Bullet()
 	
 	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0)));
 
-	btScalar mass = 5;
+	btScalar mass = 15;
 	btVector3 inertia(0, 0, 0);
 	mShape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);

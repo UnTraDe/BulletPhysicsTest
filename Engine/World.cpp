@@ -131,7 +131,7 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 
 		Bullet* bullet = new Bullet();
 		bullet->SetPosition(mCamera->GetPosition() + glm::normalize(mCamera->GetDirection() * 2.0f));
-		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z) * 50.0);
+		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z) * 100.0);
 		mObjects.push_back(bullet);
 		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
 	}
