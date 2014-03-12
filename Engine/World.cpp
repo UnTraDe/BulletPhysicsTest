@@ -10,6 +10,7 @@ World::World(glm::mat4 projection)
 
 World::~World()
 {
+	delete terrain;
 	delete mDynamicsWorld;
 	delete mSolver;
 	delete mDispatcher;
@@ -42,15 +43,8 @@ void World::Initialize()
 	//World Properties
 	mDynamicsWorld->setGravity(btVector3(0, -10, 0));
 
-	
-	//TODO Create special object for this
-	btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
-	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-	groundRigidBody->setFriction(5.0);
-	mDynamicsWorld->addRigidBody(groundRigidBody);
-
+	terrain = new Terrain();
+	mDynamicsWorld->addRigidBody(terrain->GetRigidBody());
 	for (int i = 0; i < 100; i++)
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
@@ -94,6 +88,8 @@ void World::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = mCamera->GetView();
+
+	terrain->Render(mProjection, view);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{

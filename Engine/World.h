@@ -13,6 +13,7 @@
 #include "Cube.h"
 #include "Crate.h"
 #include "Bullet.h"
+#include "Terrain.h"
 
 class World
 {
@@ -35,6 +36,7 @@ private:
 	std::vector<Object*> mObjects;
 	double lastShot;
 	int objects;
+	Terrain* terrain;
 
 	//Physics
 	btBroadphaseInterface* mBroadphase;
