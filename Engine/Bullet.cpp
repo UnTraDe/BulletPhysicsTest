@@ -76,7 +76,7 @@ Bullet::Bullet()
 	
 	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0)));
 
-	btScalar mass = 15;
+	btScalar mass = 0.2f;
 	btVector3 inertia(0, 0, 0);
 	mShape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);
@@ -105,7 +105,7 @@ Bullet::~Bullet()
 
 void Bullet::Update(float deltaTime)
 {
-
+	age++;
 }
 
 void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view)

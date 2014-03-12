@@ -15,6 +15,7 @@ public:
 
 	virtual void Update(float deltaTime) = 0;
 	virtual void Render(const glm::mat4 &projection, const glm::mat4 &view) = 0;
+	virtual bool IsAlive() { return true; }
 
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);

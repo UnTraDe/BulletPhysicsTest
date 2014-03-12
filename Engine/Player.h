@@ -10,7 +10,6 @@ public:
 
 	void Update(float deltaTime);
 	void Render(const glm::mat4 &projection, const glm::mat4 &view);
-
 private:
 	static btCollisionShape* mShape;
 };

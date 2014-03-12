@@ -45,12 +45,10 @@ int main(int argc, char const *argv[])
 		frames++;
 		if (glfwGetTime() - lastFrame >= 1.0)
 		{
-			char str[4];
-			memset(str, 0, sizeof(str));
-			itoa(frames, str, 10);
-
 			std::string s = "Engine - ";
-			s.append(str);
+			s.append(std::to_string(frames));
+			s.append(" - Objects: ");
+			s.append(std::to_string(world->GetObjects()));
 			glfwSetWindowTitle(window, s.c_str());
 			lastFrame = glfwGetTime();
 			frames = 0;

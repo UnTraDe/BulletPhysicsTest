@@ -24,7 +24,7 @@ public:
 
 	void Update(float deltaTime, GLFWwindow* window);
 	void Render();
-	
+	int GetObjects() { return objects; };
 
 private:
 	void ProcessInput(float deltaTime, GLFWwindow* window);
@@ -34,6 +34,7 @@ private:
 	Player *player;
 	std::vector<Object*> mObjects;
 	double lastShot;
+	int objects;
 
 	//Physics
 	btBroadphaseInterface* mBroadphase;

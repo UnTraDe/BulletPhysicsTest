@@ -55,28 +55,38 @@ void World::Initialize()
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		Cube* cube = new Cube(color);
-		cube->SetPosition(glm::vec3(i % 10, 50, i / 10) * 1.1f);
+		cube->SetPosition(glm::vec3(i % 10, 0.5, i / 10) * 1.1f);
 		mObjects.push_back(cube);
 		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
 	}
 
 	player = new Player();
+	player->SetPosition(glm::vec3(-2, 1, -2));
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
 {
-	mDynamicsWorld->stepSimulation(1 / 60.f, 10);
-
+	objects = 0;
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
+		if ((*it) == nullptr)
+			continue;
+		objects++;
 		(*it)->Update(deltaTime);
+		if ((*it)->IsAlive() == false || glm::distance(player->GetPosition(), (*it)->GetPosition()) > 100)
+		{
+			mDynamicsWorld->removeRigidBody((*it)->GetRigidBody());
+			delete (*it);
+			*it = nullptr;
+		}
 	}
 	
 	mCamera->SetPosition(this->player->GetPosition() + glm::vec3(0, 0.6f, 0));
 	ProcessInput(deltaTime, window);
 	mCamera->Update();
+	mDynamicsWorld->stepSimulation(1 / 60.f, 10);
 }
 
 void World::Render()
@@ -87,39 +97,42 @@ void World::Render()
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
+		if ((*it) == NULL)
+			continue;
 		(*it)->Render(mProjection, view);
 	}
 }
 
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
 {
-	float speed = 0.1f;
+	float speed = 1.0f;
 	btVector3 vel = btVector3(0,0,0);
-
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		speed *= 5.0f;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle()) * 7.0);
-		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle()) * 7.0f);
+		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle()) * 7.0f);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		vel.setX(vel.getX() - glm::sin(mCamera->GetHorizontalAngle()) * 7.0);
-		vel.setZ(vel.getZ() - glm::cos(mCamera->GetHorizontalAngle()) * 7.0);
+		vel.setX(vel.getX() - glm::sin(mCamera->GetHorizontalAngle()) * 7.0f);
+		vel.setZ(vel.getZ() - glm::cos(mCamera->GetHorizontalAngle()) * 7.0f);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
-		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle() + glm::radians(90.0)) * 7.0);
+		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle() + glm::radians(90.0f)) * 7.0f);
+		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle() + glm::radians(90.0f)) * 7.0f);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
-		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle() - glm::radians(90.0)) * 7.0);
+		vel.setX(vel.getX() + glm::sin(mCamera->GetHorizontalAngle() - glm::radians(90.0f)) * 7.0f);
+		vel.setZ(vel.getZ() + glm::cos(mCamera->GetHorizontalAngle() - glm::radians(90.0f)) * 7.0f);
 	}
-
+	vel *= speed;
 	vel.setY(player->GetRigidBody()->getLinearVelocity().getY());
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -131,7 +144,7 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 
 		Bullet* bullet = new Bullet();
 		bullet->SetPosition(mCamera->GetPosition() + glm::normalize(mCamera->GetDirection() * 2.0f));
-		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z) * 100.0);
+		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 400.0);
 		mObjects.push_back(bullet);
 		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
 	}

@@ -10,8 +10,10 @@ public:
 
 	void Update(float deltaTime);
 	void Render(const glm::mat4 &projection, const glm::mat4 &view);
-
+	bool IsAlive() { return age < 60 * 4; }
 private:
+	int age = 0;
+
 	static const Vertex CubeVertices[];
 	static GLuint mVao;
 	static GLuint mVbo;

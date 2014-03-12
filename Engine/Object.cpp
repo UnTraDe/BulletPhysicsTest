@@ -7,7 +7,8 @@ Object::Object()
 
 Object::~Object()
 {
-
+	delete mMotionState;
+	delete mRigidBody;
 }
 
 glm::vec3 Object::GetPosition()
