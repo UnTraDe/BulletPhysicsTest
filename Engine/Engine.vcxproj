@@ -98,6 +98,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="ICamera.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceManager.h" />

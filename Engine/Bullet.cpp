@@ -66,15 +66,17 @@ Bullet::Bullet()
 
 		glGenVertexArrays(1, &mVao);
 		glBindVertexArray(mVao);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*) 0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*) 12);
 		glBindVertexArray(0);
 
-		mShape = new btSphereShape(0.2f);
+		mShape = new btSphereShape(0.1f);
 	}
 	
-	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0)));
+	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 
 	btScalar mass = 0.2f;
 	btVector3 inertia(0, 0, 0);
@@ -82,6 +84,7 @@ Bullet::Bullet()
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);
 	mRigidBody = new btRigidBody(rigidBodyCI);
 	mRigidBody->setCcdMotionThreshold(0.01f);
+	mRigidBody->setActivationState(DISABLE_DEACTIVATION);
 	mInstanceCounter++;
 }
 
@@ -114,7 +117,6 @@ void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	Shader *shader = resources->GetShader("default");
 
 	shader->Bind();
-
 	GLuint vpLocation = shader->GetUniformLocation("VP");
 	GLuint modelLocation = shader->GetUniformLocation("Model");
 	GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
@@ -134,13 +136,10 @@ void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-glm::vec3(v.getX(), v.getY(), v.getZ())))[0][0]);
 	glUniform3fv(colorLocation, 1, &(glm::vec3(0,0,0))[0]);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-
 	glBindVertexArray(mVao);
+
 
 	glDrawArrays(GL_TRIANGLES, 0, (sizeof(CubeVertices) / (sizeof(GLfloat) * 6)));
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	glBindVertexArray(0);
 }

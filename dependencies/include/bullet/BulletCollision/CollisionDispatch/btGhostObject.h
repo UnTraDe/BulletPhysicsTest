@@ -18,9 +18,9 @@ subject to the following restrictions:
 
 
 #include "btCollisionObject.h"
-#include "BulletCollision/BroadphaseCollision/btOverlappingPairCallback.h"
-#include "LinearMath/btAlignedAllocator.h"
-#include "BulletCollision/BroadphaseCollision/btOverlappingPairCache.h"
+#include "bullet/BulletCollision/BroadphaseCollision/btOverlappingPairCallback.h"
+#include "bullet/LinearMath/btAlignedAllocator.h"
+#include "bullet/BulletCollision/BroadphaseCollision/btOverlappingPairCache.h"
 #include "btCollisionWorld.h"
 
 class btConvexShape;

@@ -1,11 +1,13 @@
 #pragma once
 
+#include <algorithm> // remove and remove_if
 #include <cstdlib>
 #include <vector>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include "ResourceManager.h"
 #include "FPSCamera.h"
@@ -29,6 +31,7 @@ public:
 
 private:
 	void ProcessInput(float deltaTime, GLFWwindow* window);
+	void Explode(glm::vec3 pos, float power, float radius);
 
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
