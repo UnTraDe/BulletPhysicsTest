@@ -13,8 +13,8 @@ class Shader
 {
 public:
     Shader();
-    Shader(const char* pathVertex, const char* pathFragment);
-    bool LoadFromFile(const char *pathVertex, const char *pathFragment);
+	Shader(const char* pathVertex, const char* pathGeometry, const char* pathFragment);
+	bool LoadFromFile(const char *pathVertex, const char *pathGeometry, const char *pathFragment);
     void Bind();
     void Release();
     GLuint GetUniformLocation(const char* name);
@@ -23,7 +23,10 @@ public:
 private:
     GLuint mProgram;
     GLuint mVertexShaderObj;
+	GLuint mGeometryShaderObj;
     GLuint mFragmentShaderObj;
+
     std::string mVertexSource;
+	std::string mGeometrySource;
     std::string mFragmentSource;
 };

@@ -6,22 +6,25 @@ Shader::Shader()
     
 }
 
-Shader::Shader(const char *pathVertex, const char *pathFragment)
+Shader::Shader(const char* pathVertex, const char* pathGeometry, const char* pathFragment)
 {
-	LoadFromFile(pathVertex, pathFragment);
+	LoadFromFile(pathVertex, pathGeometry, pathFragment);
 }
 
-bool Shader::LoadFromFile(const char *pathVertex, const char *pathFragment)
+bool Shader::LoadFromFile(const char *pathVertex, const char *pathGeometry, const char *pathFragment)
 {
     mVertexShaderObj = glCreateShader(GL_VERTEX_SHADER);
+	if (pathGeometry)
+		mGeometryShaderObj = glCreateShader(GL_GEOMETRY_SHADER);
     mFragmentShaderObj = glCreateShader(GL_FRAGMENT_SHADER);
+
     mProgram = glCreateProgram();
 
     std::ifstream fileVer;
+	std::ifstream fileGeo;
     std::ifstream fileFrag;
 
     fileVer.open(pathVertex);
-
     if(fileVer.is_open())
     {
         std::string buffer;
@@ -40,6 +43,28 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathFragment)
         std::cout << "Cannot open shader file: " << pathVertex << std::endl;
         return false;
     }
+
+	if (pathGeometry){
+		fileGeo.open(pathGeometry);
+		if (fileGeo.is_open())
+		{
+			std::string buffer;
+
+			while (fileGeo.good())
+			{
+				std::getline(fileGeo, buffer);
+				mGeometrySource.append(buffer + "\n");
+
+			}
+
+			fileGeo.close();
+		}
+		else
+		{
+			std::cout << "Cannot open shader file: " << pathGeometry << std::endl;
+			return false;
+		}
+	}
 
     fileFrag.open(pathFragment);
     if(fileFrag.is_open())
@@ -61,14 +86,12 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathFragment)
     }
 
     const char *vP = mVertexSource.c_str();
+	const char *vG = pathGeometry ? mGeometrySource.c_str() : NULL;
     const char *vF = mFragmentSource.c_str();
 
-    GLint length = mVertexSource.length();
-
     glShaderSource(mVertexShaderObj, 1, &vP, NULL);
-
-   
-
+	if (pathGeometry)
+		glShaderSource(mGeometryShaderObj, 1, &vG, NULL);
     glShaderSource(mFragmentShaderObj, 1, &vF, NULL);
 
 	//assert(mVertexShaderObj != 4);
@@ -84,14 +107,20 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathFragment)
     glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
     fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
 
+	if (pathGeometry)
+		glCompileShader(mGeometryShaderObj);
     glCompileShader(mFragmentShaderObj);
 
     glAttachShader(mProgram, mVertexShaderObj);
+	if (pathGeometry)
+		glAttachShader(mProgram, mGeometryShaderObj);
     glAttachShader(mProgram, mFragmentShaderObj);
 
     glLinkProgram(mProgram);
 
     glDeleteShader(mVertexShaderObj);
+	if (pathGeometry)
+		glDeleteShader(mGeometryShaderObj);
     glDeleteShader(mFragmentShaderObj);
 
     return true;

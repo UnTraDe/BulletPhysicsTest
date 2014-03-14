@@ -5,7 +5,8 @@ World::World(glm::mat4 projection)
 	mProjection = projection;
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 World::~World()
@@ -16,6 +17,7 @@ World::~World()
 	delete mDispatcher;
 	delete mCollisionConfiguration;
 	delete mBroadphase;
+	delete mGui;
 }
 
 void World::Initialize()
@@ -24,7 +26,8 @@ void World::Initialize()
 
 	ResourceManager* resources = ResourceManager::GetInstance();
 	//Load Shaders
-	resources->LoadShader("default.vert", "default.frag");
+	resources->LoadShader("default.vert", "", "default.frag");
+	resources->LoadShader("simple.vert", "", "simple.frag");
 
 	//Load Textures
 	//resources->LoadTexture("wooden_plank.jpg");
@@ -43,9 +46,9 @@ void World::Initialize()
 	//World Properties
 	mDynamicsWorld->setGravity(btVector3(0, -10, 0));
 
-	terrain = new Terrain();
+	terrain = new Terrain(100);
 	mDynamicsWorld->addRigidBody(terrain->GetRigidBody());
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		Cube* cube = new Cube(color);
@@ -55,9 +58,11 @@ void World::Initialize()
 	}
 
 	player = new Player();
-	player->SetPosition(glm::vec3(-2, 1, -2));
+	player->SetPosition(glm::vec3(1, 30, 1));
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
+
+	mGui = new Gui();
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
@@ -86,15 +91,19 @@ void World::Update(float deltaTime, GLFWwindow* window)
 void World::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 
 	glm::mat4 view = mCamera->GetView();
-
 	terrain->Render(mProjection, view);
+
+	mDynamicsWorld->debugDrawWorld();
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
 		(*it)->Render(mProjection, view);
 	}
+
+	mGui->Render();
 }
 
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
@@ -134,11 +143,16 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	{
 		lastShot = glfwGetTime();
 		glm::vec3 dir = mCamera->GetDirection();
-		Bullet* bullet = new Bullet();
+		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
+		Cube* cube = new Cube(color);
+		cube->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
+		mObjects.push_back(cube);
+		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
+		/*Bullet* bullet = new Bullet();
 		bullet->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
 		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 400.0);
 		mObjects.push_back(bullet);
-		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
+		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());*/
 	}
 	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;

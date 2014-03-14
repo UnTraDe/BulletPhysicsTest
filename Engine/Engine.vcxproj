@@ -52,13 +52,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dependencies\include\bullet;..\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\dependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32sd.lib;SOIL.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32sd.lib;glut32.lib;SOIL.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,6 +87,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -97,22 +99,27 @@
     <ClInclude Include="Crate.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="FPSCamera.h" />
+    <ClInclude Include="Gui.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\default.frag" />
     <None Include="resources\shaders\default.vert" />
+    <None Include="resources\shaders\simple.frag" />
+    <None Include="resources\shaders\simple.vert" />
     <None Include="resources\shaders\textured.frag" />
     <None Include="resources\shaders\textured.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\textures\cursor.png" />
     <Image Include="resources\textures\wooden_plank.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

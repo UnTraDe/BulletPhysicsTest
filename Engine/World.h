@@ -16,6 +16,7 @@
 #include "Crate.h"
 #include "Bullet.h"
 #include "Terrain.h"
+#include "Gui.h"
 
 class World
 {
@@ -33,6 +34,7 @@ private:
 	void ProcessInput(float deltaTime, GLFWwindow* window);
 	void Explode(glm::vec3 pos, float power, float radius);
 
+	Gui* mGui;
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
 	Player *player;

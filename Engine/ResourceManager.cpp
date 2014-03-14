@@ -35,15 +35,19 @@ void ResourceManager::LoadTexture(const std::string &name)
 	mTextures[keyName] = texture;
 }
 
-void ResourceManager::LoadShader(const std::string &vertex, const std::string &fragment)
+void ResourceManager::LoadShader(const std::string &vertex, const std::string &geomtry, const std::string &fragment)
 {
 	std::string vert(SHADERS_BASE_PATH);
 	vert.append(vertex);
 
+	std::string geom(SHADERS_BASE_PATH);
+	if (geomtry == "")
+		geom.append(geomtry);
+
 	std::string frag(SHADERS_BASE_PATH);
 	frag.append(fragment);
 
-	Shader* shader = new Shader(vert.c_str(), frag.c_str());
+	Shader* shader = new Shader(vert.c_str(), geomtry == "" ? NULL : geom.c_str(), frag.c_str());
 
 	std::stringstream s(vertex);
 	std::string keyName;

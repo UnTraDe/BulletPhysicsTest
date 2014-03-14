@@ -33,6 +33,7 @@ int main(int argc, char const *argv[])
 	glewInit();
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	glClearColor(0.53, 0.81, 0.98, 1);
+	
 	ResourceManager::CreateInstance();
 
 	World* world = new World(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 1000.0f));
