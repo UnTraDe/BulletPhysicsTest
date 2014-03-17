@@ -65,7 +65,7 @@ Terrain::Terrain(const int size)
 
 	glGenBuffers(1, &mIbo);
 	glBindBuffer(GL_ARRAY_BUFFER, mIbo);
-	glBufferData(GL_ARRAY_BUFFER, (sizeof(int) *realIndicies.size()), &realIndicies[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, (sizeof(int) *indexes.size()), &indexes[0], GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &mVao);
 	glBindVertexArray(mVao);
@@ -125,9 +125,6 @@ void Terrain::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	glPrimitiveRestartIndex(restartIndex);
 
 	int iNumIndices = (mapWidth - 1)*mapHeight * 2 + mapWidth - 1;
-	iNumIndices = (mapWidth - 1)*(mapHeight - 1) * 3;
-	//iNumIndices = 1000;
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDrawElements(GL_TRIANGLES, iNumIndices, GL_UNSIGNED_INT, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glDrawElements(GL_TRIANGLE_STRIP, iNumIndices, GL_UNSIGNED_INT, 0);
 }

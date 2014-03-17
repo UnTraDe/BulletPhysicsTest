@@ -41,7 +41,7 @@ void ResourceManager::LoadShader(const std::string &vertex, const std::string &g
 	vert.append(vertex);
 
 	std::string geom(SHADERS_BASE_PATH);
-	if (geomtry == "")
+	if (geomtry != "")
 		geom.append(geomtry);
 
 	std::string frag(SHADERS_BASE_PATH);

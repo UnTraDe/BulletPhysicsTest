@@ -107,8 +107,14 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathGeometry, cons
     glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
     fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
 
-	if (pathGeometry)
+	if (pathGeometry){
 		glCompileShader(mGeometryShaderObj);
+		glGetShaderiv(mFragmentShaderObj, GL_COMPILE_STATUS, &Result);
+		glGetShaderiv(mFragmentShaderObj, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		std::vector<char> VertexShaderErrorMessage(InfoLogLength);
+		glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+		fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
+	}
     glCompileShader(mFragmentShaderObj);
 
     glAttachShader(mProgram, mVertexShaderObj);
