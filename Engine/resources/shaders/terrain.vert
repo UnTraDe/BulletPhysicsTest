@@ -6,10 +6,10 @@ uniform mat4 MVP;
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
-//layout(location = 2) in vec2 UVCords;
+layout(location = 2) in vec2 UVCords;
 
 out float light;
-//out vec2 UV;
+out vec2 UV;
 out vec3 pos;
 
 void main()
@@ -17,6 +17,6 @@ void main()
     gl_Position =  MVP * vec4(position, 1.0f);
 	float diffuseIntensity = dot(normal, normalize(-lightDir));
 	light = clamp(ambient + diffuseIntensity * (1-ambient), 0, 1);
-	//UV = UVCords;
+	UV = UVCords;
 	pos = position;
 }

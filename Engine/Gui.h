@@ -1,9 +1,9 @@
 #pragma once
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
 #include <iostream>
 #include <fstream>
-#include <SOIL.h>
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
+#include "ResourceManager.h"
 
 class Gui
 {
@@ -16,7 +16,7 @@ public:
 	{
 		Width = 1280;
 		Height = 720;
-		cursorId = LoadTexture("resources/textures/cursor.png");
+		cursorId = ResourceManager::GetInstance()->GetTexture("cursor");
 	}
 
 	void Render()
@@ -37,17 +37,6 @@ public:
 
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
-	}
-
-	GLuint LoadTexture(const char* TextureName)
-	{
-		return SOIL_load_OGL_texture
-			(
-			TextureName,
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MULTIPLY_ALPHA
-			);
 	}
 
 	void RenderQuad(float x, float y, float w, float h)

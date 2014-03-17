@@ -18,6 +18,7 @@ public:
 	void Unintialize();
 
 	void LoadTexture(const std::string &name);
+	void LoadTextureTransparent(const std::string &name);
 	GLuint GetTexture(const std::string &name) { return mTextures[name]; };
 
 	void LoadShader(const std::string &vertex, const std::string &geomtry, const std::string &fragment);

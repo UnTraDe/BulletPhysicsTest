@@ -17,7 +17,7 @@ World::~World()
 	delete mDispatcher;
 	delete mCollisionConfiguration;
 	delete mBroadphase;
-	delete mGui;
+	//delete mGui;
 }
 
 void World::Initialize()
@@ -31,8 +31,9 @@ void World::Initialize()
 	resources->LoadShader("terrain.vert", "", "terrain.frag");
 
 	//Load Textures
-	//resources->LoadTexture("wooden_plank.jpg");
-
+	resources->LoadTextureTransparent("cursor.png");
+	resources->LoadTexture("wooden_plank.jpg");
+	
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));
 
@@ -63,7 +64,7 @@ void World::Initialize()
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 
-	mGui = new Gui();
+	//mGui = new Gui();
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
@@ -104,7 +105,7 @@ void World::Render()
 		(*it)->Render(mProjection, view);
 	}
 
-	mGui->Render();
+	//mGui->Render();
 }
 
 void World::ProcessInput(float deltaTime, GLFWwindow* window)

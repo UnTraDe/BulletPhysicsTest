@@ -20,8 +20,9 @@ private:
 	static const Vertex vertices[];
 	GLuint mVao;
 	GLuint mVbo;
-	GLuint mIbo;
+	GLuint mIndexVbo;
 	GLuint mNormalVbo;
+	GLuint mTextureCoordinatesVbo;
 	int restartIndex;
 	int mapWidth;
 	int mapHeight;

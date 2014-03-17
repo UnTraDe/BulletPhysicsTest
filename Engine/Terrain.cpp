@@ -20,10 +20,12 @@ Terrain::Terrain(const int size)
 
 	int add = rand() % 1000;
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> uv;
 	for (int i = 0; i < mapWidth; i++) {
 		for (int j = 0; j < mapHeight; j++){
 			float noiseR = 0.5f + ((float) noise(add + i / 10.0f, add + j / 10.0f) + 1) / 4.0f;
 			vertices.push_back(glm::vec3(i, noiseR * maxHeight, j));
+			uv.push_back(glm::vec2(i / float(mapWidth - 1), j / float(mapHeight - 1)));
 		}
 	}
 
@@ -124,16 +126,27 @@ Terrain::Terrain(const int size)
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(glm::vec3) *mapWidth*mapHeight), &vertices[0][0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &mIbo);
-	glBindBuffer(GL_ARRAY_BUFFER, mIbo);
+	glGenBuffers(1, &mIndexVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mIndexVbo);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(int) *indexes.size()), &indexes[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &mNormalVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, mNormalVbo);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(glm::vec3)*mapWidth*mapHeight), &normals[0], GL_STATIC_DRAW);
 
+	glGenBuffers(1, &mTextureCoordinatesVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordinatesVbo);
+	glBufferData(GL_ARRAY_BUFFER, (sizeof(glm::vec2)*uv.size()), &uv[0], GL_STATIC_DRAW);
+	
 	glGenVertexArrays(1, &mVao);
 	glBindVertexArray(mVao);
+
+	GLuint texture = ResourceManager::GetInstance()->GetTexture("wooden_plank");
+	Shader *shader = ResourceManager::GetInstance()->GetShader("terrain");
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glUniform1i(texture, shader->GetUniformLocation("textSampler"));
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
@@ -143,7 +156,11 @@ Terrain::Terrain(const int size)
 	glBindBuffer(GL_ARRAY_BUFFER, mNormalVbo);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIbo);
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, mTextureCoordinatesVbo);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexVbo);
 	glBindVertexArray(0);
 
 	int* indicesAr = new int[realIndicies.size()];
