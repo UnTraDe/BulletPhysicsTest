@@ -28,6 +28,7 @@ void World::Initialize()
 	//Load Shaders
 	resources->LoadShader("default.vert", "", "default.frag");
 	resources->LoadShader("simple.vert", "", "simple.frag");
+	resources->LoadShader("terrain.vert", "", "terrain.frag");
 
 	//Load Textures
 	//resources->LoadTexture("wooden_plank.jpg");

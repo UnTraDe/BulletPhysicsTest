@@ -12,7 +12,7 @@
 class Terrain
 {
 public:
-	Terrain(const int size);
+	Terrain(int size);
 	~Terrain();
 	void Render(const glm::mat4 &projection, const glm::mat4 &view);
 	btRigidBody* GetRigidBody() { return mRigidBody; };
@@ -21,6 +21,7 @@ private:
 	GLuint mVao;
 	GLuint mVbo;
 	GLuint mIbo;
+	GLuint mNormalVbo;
 	int restartIndex;
 	int mapWidth;
 	int mapHeight;

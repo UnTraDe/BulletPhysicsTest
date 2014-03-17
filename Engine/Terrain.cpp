@@ -59,6 +59,67 @@ Terrain::Terrain(const int size)
 		}
 	}
 
+	std::vector<glm::vec3> normals;
+
+	for (int i = 0; i < mapWidth; i++)
+	{
+		for (int j = 0; j < mapHeight; j++)
+		{
+			glm::vec3 normal(0.0f, 0.0f, 0.0f);
+
+			if (i != mapWidth - 1 && j != mapHeight - 1)
+			{
+				glm::vec3 v1 = vertices[(i * mapWidth) + j]; //Current
+				glm::vec3 v2 = vertices[(i * mapWidth) + (j + 1)]; //Below
+				glm::vec3 v3 = vertices[((i + 1) * mapWidth) + j]; //Right of
+
+				normal += glm::normalize(glm::cross((v1 - v2), (v1 - v3))); //Vertical x Horizontal
+			}
+
+			if (i != 0 && j != 0)
+			{
+				glm::vec3 v1 = vertices[(i * mapWidth) + j]; //Current
+				glm::vec3 v2 = vertices[(i * mapWidth) + (j - 1)]; //Above
+				glm::vec3 v3 = vertices[((i - 1) * mapWidth) + j]; //Left of
+
+				normal += glm::normalize(glm::cross((v2 - v1), (v3 - v1))); //Vertical x Horizontal
+			}
+
+			if (i != mapWidth - 1 && j != 0)
+			{
+				glm::vec3 v1 = vertices[(i * mapWidth) + j]; //Current
+				glm::vec3 v2 = vertices[(i * mapWidth) + (j - 1)]; //Above
+				glm::vec3 v3 = vertices[((i + 1) * mapWidth) + (j - 1)]; //Above and Right of
+
+				normal += glm::normalize(glm::cross((v2 - v1), (v2 - v3))); //Vertical x Horizontal
+
+				v1 = vertices[(i * mapWidth) + j]; //Current
+				v2 = vertices[((i + 1) * mapWidth) + (j - 1)]; //Above and Right of
+				v3 = vertices[((i + 1) * mapWidth) + j]; //Right of
+
+				normal += glm::normalize(glm::cross((v2 - v3), (v1 - v3))); //Vertical x Horizontal
+			}
+
+			if (i != 0 && j != mapHeight - 1)
+			{
+				glm::vec3 v1 = vertices[(i * mapWidth) + j]; //Current
+				glm::vec3 v2 = vertices[((i - 1) * mapWidth) + j]; //Left of
+				glm::vec3 v3 = vertices[(i * mapWidth) + (j + 1)]; // Below
+
+				normal += glm::normalize(glm::cross((v2 - v1), (v1 - v3))); //Vertical x Horizontal
+
+				v1 = vertices[(i * mapWidth) + j]; //Current
+				v2 = vertices[((i - 1) * mapWidth) + j]; //Left of
+				v3 = vertices[((i - 1) * mapWidth) + (j + 1)]; //Below and Left of
+
+				normal += glm::normalize(glm::cross((v2 - v1), (v3 - v2))); //Vertical x Horizontal
+			}
+
+			normals.push_back(glm::normalize(normal));
+
+		}
+	}
+
 	glGenBuffers(1, &mVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(glm::vec3) *mapWidth*mapHeight), &vertices[0][0], GL_STATIC_DRAW);
@@ -67,11 +128,21 @@ Terrain::Terrain(const int size)
 	glBindBuffer(GL_ARRAY_BUFFER, mIbo);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(int) *indexes.size()), &indexes[0], GL_STATIC_DRAW);
 
+	glGenBuffers(1, &mNormalVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mNormalVbo);
+	glBufferData(GL_ARRAY_BUFFER, (sizeof(glm::vec3)*mapWidth*mapHeight), &normals[0], GL_STATIC_DRAW);
+
 	glGenVertexArrays(1, &mVao);
 	glBindVertexArray(mVao);
+
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, mNormalVbo);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIbo);
 	glBindVertexArray(0);
 
@@ -111,13 +182,13 @@ Terrain::~Terrain()
 void Terrain::Render(const glm::mat4 &projection, const glm::mat4 &view)
 {
 	ResourceManager* resources = ResourceManager::GetInstance();
-	Shader *shader = resources->GetShader("simple");
+	Shader *shader = resources->GetShader("terrain");
 
 	shader->Bind();
 
 	GLuint mvpLocation = shader->GetUniformLocation("MVP");
 
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &(projection * view * glm::mat4(1.0f))[0][0]);
 
 	glBindVertexArray(mVao);
 
