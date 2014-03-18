@@ -32,7 +32,7 @@ void World::Initialize()
 
 	//Load Textures
 	resources->LoadTextureTransparent("cursor.png");
-	resources->LoadTexture("wooden_plank.jpg");
+	resources->LoadTexture("grass.png");
 	
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));

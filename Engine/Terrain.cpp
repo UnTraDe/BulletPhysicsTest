@@ -142,7 +142,7 @@ Terrain::Terrain(const int size)
 	glGenVertexArrays(1, &mVao);
 	glBindVertexArray(mVao);
 
-	GLuint texture = ResourceManager::GetInstance()->GetTexture("wooden_plank");
+	GLuint texture = ResourceManager::GetInstance()->GetTexture("grass");
 	Shader *shader = ResourceManager::GetInstance()->GetShader("terrain");
 
 	glActiveTexture(GL_TEXTURE0);
