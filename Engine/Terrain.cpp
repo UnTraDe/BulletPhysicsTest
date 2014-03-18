@@ -25,7 +25,8 @@ Terrain::Terrain(const int size)
 		for (int j = 0; j < mapHeight; j++){
 			float noiseR = 0.5f + ((float) noise(add + i / 10.0f, add + j / 10.0f) + 1) / 4.0f;
 			vertices.push_back(glm::vec3(i, noiseR * maxHeight, j));
-			uv.push_back(glm::vec2(i / float(mapWidth - 1), j / float(mapHeight - 1)));
+
+			uv.push_back(glm::vec2(i / 10.0f, j / 10.0f));
 		}
 	}
 
@@ -146,6 +147,8 @@ Terrain::Terrain(const int size)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glUniform1i(texture, shader->GetUniformLocation("textSampler"));
 
 	glEnableVertexAttribArray(0);
