@@ -18,6 +18,7 @@ public:
 	btRigidBody* GetRigidBody() { return mRigidBody; };
 private:
 	static const Vertex vertices[];
+	GLuint mTextureId;
 	GLuint mVao;
 	GLuint mVbo;
 	GLuint mIndexVbo;

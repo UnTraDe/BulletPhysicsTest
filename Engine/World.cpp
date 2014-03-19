@@ -64,7 +64,7 @@ void World::Initialize()
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 
-	//mGui = new Gui();
+	mGui = new Gui();
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
@@ -105,7 +105,7 @@ void World::Render()
 		(*it)->Render(mProjection, view);
 	}
 
-	//mGui->Render();
+	mGui->Render();
 }
 
 void World::ProcessInput(float deltaTime, GLFWwindow* window)
@@ -145,16 +145,11 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	{
 		lastShot = glfwGetTime();
 		glm::vec3 dir = mCamera->GetDirection();
-		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
-		Cube* cube = new Cube(color);
-		cube->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
-		mObjects.push_back(cube);
-		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
-		/*Bullet* bullet = new Bullet();
+		Bullet* bullet = new Bullet();
 		bullet->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
-		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 400.0);
+		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 100.0);
 		mObjects.push_back(bullet);
-		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());*/
+		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
 	}
 	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;
@@ -169,6 +164,23 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	mCamera->AddHorizontalAngle((float)((wX / 2.0f) - x) * 0.002f);
 	
 	glfwSetCursorPos(window, wX / 2, wY / 2);
+
+	//Gui cursor scaling
+	glm::vec3 dir1 = mCamera->GetDirection() * 2.0f;
+	glm::vec3 dir = mCamera->GetDirection() * 100.0f;
+	glm::vec3 pos = mCamera->GetPosition();
+	if (pos.x * pos.y * pos.z == 0)
+		return;
+	btCollisionWorld::ClosestRayResultCallback RayCallback(btVector3(pos.x, pos.y, pos.z), btVector3(pos.x + dir.x, pos.y + dir.y, pos.z + dir.z));
+	mDynamicsWorld->rayTest(btVector3(pos.x + dir1.x, pos.y + dir1.y, pos.z + dir1.z), btVector3(pos.x + dir.x, pos.y + dir.y, pos.z + dir.z), RayCallback);
+
+	float scale = 1.0f;
+	if (RayCallback.hasHit()) {
+		float d = btDistance(btVector3(pos.x, pos.y, pos.z), RayCallback.m_hitPointWorld) / 10.0f;
+		scale = d;
+	}
+	btClamp(scale, 1.0f, 4.0f);
+	mGui->scale = scale;
 }
 
 void World::Explode(glm::vec3 pos, float power, float radius)

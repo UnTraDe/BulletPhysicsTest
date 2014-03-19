@@ -142,14 +142,14 @@ Terrain::Terrain(const int size)
 	glGenVertexArrays(1, &mVao);
 	glBindVertexArray(mVao);
 
-	GLuint texture = ResourceManager::GetInstance()->GetTexture("grass");
+	mTextureId = ResourceManager::GetInstance()->GetTexture("grass");
 	Shader *shader = ResourceManager::GetInstance()->GetShader("terrain");
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, mTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glUniform1i(texture, shader->GetUniformLocation("textSampler"));
+	glUniform1i(mTextureId, shader->GetUniformLocation("textSampler"));
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
@@ -205,6 +205,9 @@ void Terrain::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	Shader *shader = resources->GetShader("terrain");
 
 	shader->Bind();
+
+	glBindTexture(GL_TEXTURE_2D, mTextureId);
+	glUniform1i(mTextureId, shader->GetUniformLocation("textSampler"));
 
 	GLuint mvpLocation = shader->GetUniformLocation("MVP");
 

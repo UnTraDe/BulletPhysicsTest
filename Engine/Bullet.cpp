@@ -83,7 +83,8 @@ Bullet::Bullet()
 	mShape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, mMotionState, mShape, inertia);
 	mRigidBody = new btRigidBody(rigidBodyCI);
-	mRigidBody->setCcdMotionThreshold(0.01f);
+	mRigidBody->setCcdMotionThreshold(0.1f);
+	mRigidBody->setCcdSweptSphereRadius(0.01f);
 	mRigidBody->setActivationState(DISABLE_DEACTIVATION);
 	mInstanceCounter++;
 }

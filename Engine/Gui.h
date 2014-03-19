@@ -8,6 +8,7 @@
 class Gui
 {
 public:
+	float scale = 1.0f;
 	int Width;
 	int Height;
 	GLuint cursorId;
@@ -33,10 +34,11 @@ public:
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, cursorId);
 
-		RenderQuad(Width / 2 - 16, Height / 2 - 16, 32, 32);
+		RenderQuad(Width / 2 - (int) (16 * scale), Height / 2 - (int) (16 * scale), (int) (32 * scale), (int) (32 * scale));
 
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void RenderQuad(float x, float y, float w, float h)
