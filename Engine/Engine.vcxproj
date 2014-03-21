@@ -115,7 +115,6 @@
     <None Include="resources\shaders\default.frag" />
     <None Include="resources\shaders\default.vert" />
     <None Include="resources\shaders\simple.frag" />
-    <None Include="resources\shaders\simple.geom" />
     <None Include="resources\shaders\simple.vert" />
     <None Include="resources\shaders\textured.frag" />
     <None Include="resources\shaders\textured.vert" />

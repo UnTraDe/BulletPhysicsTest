@@ -133,7 +133,6 @@
     <None Include="resources\shaders\simple.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\shaders\simple.geom" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wooden_plank.jpg">
