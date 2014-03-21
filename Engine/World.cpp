@@ -17,7 +17,7 @@ World::~World()
 	delete mDispatcher;
 	delete mCollisionConfiguration;
 	delete mBroadphase;
-	//delete mGui;
+	delete mGui;
 }
 
 void World::Initialize()
@@ -33,7 +33,7 @@ void World::Initialize()
 	//Load Textures
 	resources->LoadTextureTransparent("cursor.png");
 	resources->LoadTexture("grass.png");
-	
+
 	//Create Camera
 	mCamera = new FPSCamera(glm::vec3(0.0f, 10.0f, 2.0f));
 
@@ -63,6 +63,9 @@ void World::Initialize()
 	player->SetPosition(glm::vec3(1, 30, 1));
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
+
+	//Models
+	testModel = Model::ReadModelFromObjFile("resources/models/test.obj");
 
 	mGui = new Gui();
 }
@@ -97,14 +100,12 @@ void World::Render()
 
 	glm::mat4 view = mCamera->GetView();
 	terrain->Render(mProjection, view);
-
-	mDynamicsWorld->debugDrawWorld();
+	testModel->RenderModel(mProjection, view);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
 		(*it)->Render(mProjection, view);
 	}
-
 	mGui->Render();
 }
 
@@ -166,7 +167,7 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	glfwSetCursorPos(window, wX / 2, wY / 2);
 
 	//Gui cursor scaling
-	glm::vec3 dir1 = mCamera->GetDirection() * 2.0f;
+	/*glm::vec3 dir1 = mCamera->GetDirection() * 2.0f;
 	glm::vec3 dir = mCamera->GetDirection() * 100.0f;
 	glm::vec3 pos = mCamera->GetPosition();
 	if (pos.x * pos.y * pos.z == 0)
@@ -180,7 +181,7 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 		scale = d;
 	}
 	btClamp(scale, 1.0f, 4.0f);
-	mGui->scale = scale;
+	mGui->scale = scale;*/
 }
 
 void World::Explode(glm::vec3 pos, float power, float radius)
