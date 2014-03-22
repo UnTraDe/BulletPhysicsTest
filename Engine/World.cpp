@@ -145,11 +145,12 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 		vel.setY(4.0 * speed);
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetTime() - lastShot > 0.5)
 	{
+		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		lastShot = glfwGetTime();
 		glm::vec3 dir = mCamera->GetDirection();
-		Bullet* bullet = new Bullet();
+		Object* bullet = new Cube(color);
 		bullet->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
-		bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 100.0);
+		//bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 100.0);
 		mObjects.push_back(bullet);
 		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
 	}
