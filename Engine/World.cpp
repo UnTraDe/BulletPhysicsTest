@@ -65,7 +65,7 @@ void World::Initialize()
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 
 	//Models
-	testModel = Model::ReadModelFromObjFile("resources/models/test.obj");
+	testModel = Model::ReadModelFromObjFile("resources/models/MetalBarrel.obj");
 
 	mGui = new Gui();
 }
@@ -141,7 +141,7 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	vel *= speed;
 	vel.setY(player->GetRigidBody()->getLinearVelocity().getY());
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		vel.setY(4.0);
+		vel.setY(4.0 * speed);
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetTime() - lastShot > 0.5)
 	{
 		lastShot = glfwGetTime();
