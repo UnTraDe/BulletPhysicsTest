@@ -30,7 +30,7 @@ public:
 		mVao = 0;*/
 	}
 
-	void RenderModel(const glm::mat4 &projection, const glm::mat4 &view) {
+	void RenderModel(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &pos = glm::vec3(0.0f), const glm::mat4 &model = glm::mat4(1.0f)) {
 		ResourceManager* resources = ResourceManager::GetInstance();
 		Shader *shader = resources->GetShader("default");
 
@@ -40,13 +40,10 @@ public:
 		GLuint modelLocation = shader->GetUniformLocation("Model");
 		GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
 		GLuint colorLocation = shader->GetUniformLocation("normalColor");
-
-		btVector3 v = btVector3(10, 10, 10);
-		glm::mat4 model = glm::translate(v.getX(), v.getY(), v.getZ());
 		
 		glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
-		glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-glm::vec3(v.getX(), v.getY(), v.getZ())))[0][0]);
+		glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-pos))[0][0]);
 		glUniform3fv(colorLocation, 1, &(glm::vec3(0.5f, 0.5f, 0.5f))[0]);
 
 		glBindVertexArray(mVao);
@@ -54,7 +51,7 @@ public:
 		glDrawArrays(GL_TRIANGLES, 0, count);
 	}
 
-	static Model* ReadModelFromObjFile(const char* filePath) {
+	static Model* ReadModelFromObjFile(const char* filePath, float scale = 1.0f) {
 		Model* model = new Model();
 		std::ifstream file(filePath);
 		if (!file)
@@ -76,7 +73,7 @@ public:
 				file >> x;
 				file >> y;
 				file >> z;
-				vertices.push_back(glm::vec3(x, y, z));
+				vertices.push_back(glm::vec3(x, y, z) * scale);
 			}
 			else if (header == "vn") {
 				float x, y, z;

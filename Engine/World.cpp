@@ -65,8 +65,10 @@ void World::Initialize()
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 
 	//Models
-	testModel = Model::ReadModelFromObjFile("resources/models/MetalBarrel.obj");
-
+	Model* testModel = Model::ReadModelFromObjFile("resources/models/MetalBarrel.obj", 0.01f);
+	ObjectModel* objm = new ObjectModel(glm::vec3(20, 50, 20), testModel);
+	mObjects.push_back(objm);
+	mDynamicsWorld->addRigidBody(objm->GetRigidBody());
 	mGui = new Gui();
 }
 
@@ -100,7 +102,6 @@ void World::Render()
 
 	glm::mat4 view = mCamera->GetView();
 	terrain->Render(mProjection, view);
-	testModel->RenderModel(mProjection, view);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{

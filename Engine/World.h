@@ -18,6 +18,7 @@
 #include "Terrain.h"
 #include "Gui.h"
 #include "Model.h"
+#include "ObjectModel.h"
 
 class World
 {
@@ -43,7 +44,6 @@ private:
 	double lastShot;
 	int objects;
 	Terrain* terrain;
-	Model* testModel;
 
 	//Physics
 	btBroadphaseInterface* mBroadphase;

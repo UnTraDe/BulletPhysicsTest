@@ -190,7 +190,7 @@ Terrain::Terrain(const int size)
 	btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, tshape, btVector3(0, 0, 0));
 	mRigidBody = new btRigidBody(groundRigidBodyCI);
-	mRigidBody->setFriction(0.0);
+	mRigidBody->setFriction(0.5);
 	//mRigidBody->getWorldTransform().setOrigin(btVector3(0, -1, 0));
 }
 
