@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{19c5373f-b2f2-4b06-8d03-ddb3be1170ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{f0737333-1641-4d0e-b0ce-fd6241a525a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -141,5 +144,8 @@
     <Image Include="resources\textures\cursor.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\models\MetalBarrel.obj" />
   </ItemGroup>
 </Project>

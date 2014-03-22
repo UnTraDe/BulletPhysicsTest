@@ -123,6 +123,9 @@
     <Image Include="resources\textures\cursor.png" />
     <Image Include="resources\textures\wooden_plank.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="resources\models\MetalBarrel.obj" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
