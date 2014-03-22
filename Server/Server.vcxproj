@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C7D87CDA-BF92-430B-AD6B-8BFCEA671885}</ProjectGuid>
+    <ProjectGuid>{969F79C0-A894-42EE-9253-8F9DA0D8A583}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Engine</RootNamespace>
+    <RootNamespace>Server</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -51,15 +51,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\dependencies\include\bullet;..\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\dependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32sd.lib;SOIL.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;enet.lib;LinearMath_Debug.lib;ws2_32.lib;winmm.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>..\dependencies\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>enet.lib;ws2_32.lib;winmm.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,48 +79,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Crate.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="FPSCamera.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="SimplexNoise.cpp" />
-    <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="CommonData.h" />
-    <ClInclude Include="Crate.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="FPSCamera.h" />
-    <ClInclude Include="Gui.h" />
-    <ClInclude Include="ICamera.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="SimplexNoise.h" />
-    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="Server.h" />
     <ClInclude Include="World.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\shaders\default.frag" />
-    <None Include="resources\shaders\default.vert" />
-    <None Include="resources\shaders\simple.frag" />
-    <None Include="resources\shaders\simple.vert" />
-    <None Include="resources\shaders\textured.frag" />
-    <None Include="resources\shaders\textured.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\textures\cursor.png" />
-    <Image Include="resources\textures\wooden_plank.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
