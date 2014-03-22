@@ -124,7 +124,9 @@
     <Image Include="resources\textures\wooden_plank.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="resources\models\MetalBarrel.obj" />
+    <None Include="resources\models\MetalBarrel.obj">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
