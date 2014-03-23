@@ -6,7 +6,7 @@ class ObjectModel :
 	public Object
 {
 public:
-	ObjectModel(const glm::vec3 startPos, Model* model);
+	ObjectModel(const glm::vec3 startPos, Model* model, btCollisionShape* shape);
 	~ObjectModel();
 
 	void Update(float deltaTime);

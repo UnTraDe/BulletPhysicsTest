@@ -22,5 +22,7 @@ void Object::SetPosition(glm::vec3 position)
 {
 	btTransform transform;
 	mRigidBody->getMotionState()->getWorldTransform(transform);
-	mRigidBody->setWorldTransform(btTransform(btQuaternion(0, 0, 0, 1), btVector3(position.x, position.y, position.z)));
+	transform.setOrigin(btVector3(position.x, position.y, position.z));
+
+	mRigidBody->setWorldTransform(transform);
 }

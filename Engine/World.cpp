@@ -50,23 +50,15 @@ void World::Initialize()
 
 	terrain = new Terrain(100);
 	mDynamicsWorld->addRigidBody(terrain->GetRigidBody());
-	for (int i = 0; i < 10; i++)
-	{
-		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
-		Cube* cube = new Cube(color);
-		cube->SetPosition(glm::vec3(i % 5, 0.5, i / 5) * 2.0f);
-		mObjects.push_back(cube);
-		mDynamicsWorld->addRigidBody(cube->GetRigidBody());
-	}
 
 	player = new Player();
-	player->SetPosition(glm::vec3(1, 30, 1));
+	player->SetPosition(glm::vec3(10, 30, 10));
 	mObjects.push_back(player);
 	mDynamicsWorld->addRigidBody(player->GetRigidBody());
 
 	//Models
 	Model* testModel = Model::ReadModelFromObjFile("resources/models/MetalBarrel.obj", 0.01f);
-	ObjectModel* objm = new ObjectModel(glm::vec3(20, 50, 20), testModel);
+	ObjectModel* objm = new ObjectModel(glm::vec3(20, 50, 20), testModel, new btCylinderShape(btVector3(0.5f, 0.75f, 0.5f)));
 	mObjects.push_back(objm);
 	mDynamicsWorld->addRigidBody(objm->GetRigidBody());
 	mGui = new Gui();
@@ -81,7 +73,6 @@ void World::Update(float deltaTime, GLFWwindow* window)
 		(*it)->Update(deltaTime);
 		if ((*it)->IsAlive() == false)
 		{
-			Explode((*it)->GetPosition(), 100, 10);
 			mDynamicsWorld->removeRigidBody((*it)->GetRigidBody());
 			delete (*it);
 			*it = nullptr;
@@ -143,16 +134,22 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	vel.setY(player->GetRigidBody()->getLinearVelocity().getY());
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		vel.setY(4.0 * speed);
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && glfwGetTime() - lastShot > 0.5)
+	if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS || glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) && glfwGetTime() - lastShot > 0.5)
 	{
+		bool bullet = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 		glm::vec3 color(((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f), ((std::rand() % 255) / 255.0f));
 		lastShot = glfwGetTime();
 		glm::vec3 dir = mCamera->GetDirection();
-		Object* bullet = new Cube(color);
-		bullet->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
-		//bullet->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 100.0);
-		mObjects.push_back(bullet);
-		mDynamicsWorld->addRigidBody(bullet->GetRigidBody());
+		Object* obj;
+		if (bullet)
+			obj = new Cube(color);
+		else {
+			obj = new Bullet();
+			obj->GetRigidBody()->setLinearVelocity(btVector3(dir.x, dir.y, dir.z).normalize() * 100.0);
+		}
+		obj->SetPosition(player->GetPosition() + glm::vec3(0, 0.6f, 0) + glm::normalize(mCamera->GetDirection()));
+		mObjects.push_back(obj);
+		mDynamicsWorld->addRigidBody(obj->GetRigidBody());
 	}
 	player->GetRigidBody()->setLinearVelocity(vel);
 	int wX;
@@ -167,23 +164,6 @@ void World::ProcessInput(float deltaTime, GLFWwindow* window)
 	mCamera->AddHorizontalAngle((float)((wX / 2.0f) - x) * 0.002f);
 	
 	glfwSetCursorPos(window, wX / 2, wY / 2);
-
-	//Gui cursor scaling
-	/*glm::vec3 dir1 = mCamera->GetDirection() * 2.0f;
-	glm::vec3 dir = mCamera->GetDirection() * 100.0f;
-	glm::vec3 pos = mCamera->GetPosition();
-	if (pos.x * pos.y * pos.z == 0)
-		return;
-	btCollisionWorld::ClosestRayResultCallback RayCallback(btVector3(pos.x, pos.y, pos.z), btVector3(pos.x + dir.x, pos.y + dir.y, pos.z + dir.z));
-	mDynamicsWorld->rayTest(btVector3(pos.x + dir1.x, pos.y + dir1.y, pos.z + dir1.z), btVector3(pos.x + dir.x, pos.y + dir.y, pos.z + dir.z), RayCallback);
-
-	float scale = 1.0f;
-	if (RayCallback.hasHit()) {
-		float d = btDistance(btVector3(pos.x, pos.y, pos.z), RayCallback.m_hitPointWorld) / 10.0f;
-		scale = d;
-	}
-	btClamp(scale, 1.0f, 4.0f);
-	mGui->scale = scale;*/
 }
 
 void World::Explode(glm::vec3 pos, float power, float radius)
@@ -200,28 +180,4 @@ void World::Explode(glm::vec3 pos, float power, float radius)
 		(*it)->GetRigidBody()->activate();
 		(*it)->GetRigidBody()->applyCentralImpulse(btVector3(dir.x, dir.y, dir.z) * power / (distance / radius));
 	}
-	/*btGhostObject* explosionObj = new btPairCachingGhostObject();
-	btCollisionShape* explosionshape = new btSphereShape(radius);
-	explosionObj->setCollisionShape(explosionshape);
-	explosionObj->setCollisionFlags(explosionObj->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	explosionObj->setWorldTransform(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
-
-	mDynamicsWorld->addCollisionObject(explosionObj, btBroadphaseProxy::SensorTrigger, btBroadphaseProxy::AllFilter);
-	btAlignedObjectArray<btCollisionObject*> inrangeObjects = explosionObj->getOverlappingPairs();
-	for (int i = 0; i < inrangeObjects.size(); i++)
-	{
-		if (!inrangeObjects.at(i)->isStaticObject())
-		{
-			btCollisionObject* obj = inrangeObjects.at(i);
-
-			btVector3 explosionDir = obj->getWorldTransform().getOrigin() - btVector3(pos.x, pos.y, pos.z);
-			explosionDir.normalize();
-
-			btRigidBody::upcast(obj)->applyCentralImpulse(explosionDir*power); //problem is here, commenting out this line prevents crash
-		}
-	}
-
-	mDynamicsWorld->removeCollisionObject(explosionObj);
-	delete explosionObj;
-	delete explosionshape;*/
 }

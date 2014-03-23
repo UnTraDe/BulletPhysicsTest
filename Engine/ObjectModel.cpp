@@ -1,11 +1,11 @@
 #include "ObjectModel.h"
 
 
-ObjectModel::ObjectModel(const glm::vec3 startPos, Model* model)
+ObjectModel::ObjectModel(const glm::vec3 startPos, Model* model, btCollisionShape* shape)
 {
 	this->model = model;
 
-	mShape = new btCylinderShape(btVector3(0.5f, 0.75f, 0.5f));
+	mShape = shape;
 	//Physics
 	mMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(startPos.x, startPos.y, startPos.z)));
 	btScalar mass = 5;

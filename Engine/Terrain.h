@@ -16,6 +16,8 @@ public:
 	~Terrain();
 	void Render(const glm::mat4 &projection, const glm::mat4 &view);
 	btRigidBody* GetRigidBody() { return mRigidBody; };
+	int GetMapWidth() { return mapWidth; };
+	int GetMapHeight() { return mapHeight; };
 private:
 	static const Vertex vertices[];
 	GLuint mTextureId;
