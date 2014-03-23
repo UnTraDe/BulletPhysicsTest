@@ -1,7 +1,11 @@
 #pragma once
 
-class IPacket
+#define PACKET_WORLD_STATE 1
+
+
+class Packet
 {
 public:
-	virtual char* GetSerializedData() = 0;
+	virtual unsigned char* GetData() = 0;
+	virtual int GetDataSize() = 0;
 };

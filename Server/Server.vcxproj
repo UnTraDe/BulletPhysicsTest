@@ -58,7 +58,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\dependencies\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>enet.lib;ws2_32.lib;winmm.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>enet.lib;ws2_32.lib;winmm.lib;zlib.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,14 +80,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldStatePacket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="Structures.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="WorldStatePacket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

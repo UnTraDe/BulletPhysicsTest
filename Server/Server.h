@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <map>
 #include <enet/enet.h>
 #include "Packet.h"
 #include "Client.h"
@@ -20,7 +20,7 @@ private:
 	ENetHost* m_ENetHost;
 
 	World world;
-	std::list<Client> m_Clients;
+	std::map<int, Client> m_Clients;
 
 	void ProcessPacket(ENetPacket* packet);
 };

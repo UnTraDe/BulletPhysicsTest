@@ -8,19 +8,15 @@
 class Client
 {
 public:
+	Client() {};
 	Client(ENetPeer* enetPeer) { m_ENetPeer = enetPeer; m_ID = *(int*)enetPeer->data; };
-	~Client();
+	~Client() {};
 
-	template<struct T>
-	void Send(const T &packet)
-	{
-		ENetPacket* packet = enet_packet_create((char*)T, sizeof(T), 0);
-		enet_peer_send(m_ENetPeer, 0, packet);
-	}
+	void Send(void* data, int size, int channel, int flags);
 
 private:
 	ENetPeer* m_ENetPeer;
 	int m_ID;
-	std::queue<std::shared_ptr<IPacket>> m_OutgoingPackets;
-	std::queue<std::shared_ptr<IPacket>> m_IncomingPackets;
+	std::queue<std::shared_ptr<Packet>> m_OutgoingPackets;
+	std::queue<std::shared_ptr<Packet>> m_IncomingPackets;
 };

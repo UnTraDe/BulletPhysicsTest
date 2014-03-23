@@ -6,10 +6,15 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-	if (!enet_initialize())
-		cout << "Error initializing Enet library" << endl;
+	int error = 0;
+
+	if ((error = enet_initialize()) != 0)
+	{
+		cout << "Error initializing Enet library, Error code: " << error << endl;
+	}
+		
 	
-	Server *server = new Server(1234);
+	Server* server = new Server(1234);
 
 	server->Run();
 
