@@ -6,6 +6,7 @@ Server::Server(int port)
 	m_ENetAddress.port = port;
 
 	m_ENetHost = enet_host_create(&m_ENetAddress, 32, 2, 0, 0);
+	printf("The server was created on port %d.\n", port);
 }
 
 Server::~Server()

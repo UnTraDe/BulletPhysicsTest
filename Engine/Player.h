@@ -9,7 +9,7 @@ public:
 	~Player();
 
 	void Update(float deltaTime);
-	void Render(const glm::mat4 &projection, const glm::mat4 &view);
+	void Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader);
 private:
 	static btCollisionShape* mShape;
 };

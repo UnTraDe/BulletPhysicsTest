@@ -26,6 +26,6 @@ void Player::Update(float deltaTime)
 {
 }
 
-void Player::Render(const glm::mat4 &projection, const glm::mat4 &view)
+void Player::Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader)
 {
 }

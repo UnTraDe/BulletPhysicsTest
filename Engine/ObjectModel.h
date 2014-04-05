@@ -10,7 +10,7 @@ public:
 	~ObjectModel();
 
 	void Update(float deltaTime);
-	void Render(const glm::mat4 &projection, const glm::mat4 &view);
+	void Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader);
 
 private:
 	Model* model;

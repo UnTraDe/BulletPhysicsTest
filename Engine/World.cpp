@@ -25,10 +25,12 @@ void World::Initialize()
 	//-Resources-
 
 	ResourceManager* resources = ResourceManager::GetInstance();
+
 	//Load Shaders
 	resources->LoadShader("default.vert", "", "default.frag");
 	resources->LoadShader("simple.vert", "", "simple.frag");
 	resources->LoadShader("terrain.vert", "", "terrain.frag");
+	resources->LoadShader("depth.vert", "", "depth.frag");
 
 	//Load Textures
 	resources->LoadTextureTransparent("cursor.png");
@@ -58,10 +60,12 @@ void World::Initialize()
 
 	//Models
 	Model* testModel = Model::ReadModelFromObjFile("resources/models/MetalBarrel.obj", 0.01f);
-	ObjectModel* objm = new ObjectModel(glm::vec3(20, 50, 20), testModel, new btCylinderShape(btVector3(0.5f, 0.75f, 0.5f)));
+	ObjectModel* objm = new ObjectModel(glm::vec3(20, 50, 20), testModel, new btCylinderShape(btVector3(0.55f, 0.80f, 0.55f)));
 	mObjects.push_back(objm);
 	mDynamicsWorld->addRigidBody(objm->GetRigidBody());
 	mGui = new Gui();
+
+	mFbo = new FrameBufferObject(1024);
 }
 
 void World::Update(float deltaTime, GLFWwindow* window)
@@ -88,17 +92,45 @@ void World::Update(float deltaTime, GLFWwindow* window)
 
 void World::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	ResourceManager* resourceManager = ResourceManager::GetInstance();
+
+	glm::mat4 depthProj = glm::ortho<float>(-5, 5, -5, 5, -100, 100);
+	glm::mat4 depthView = glm::lookAt(mCamera->GetPosition() - glm::normalize(glm::vec3(1.0f, -3.0f, 2.0f)) * 10.0f, mCamera->GetPosition(), glm::vec3(0, 1, 0));
+
+	Shader* depthShader = resourceManager->GetShader("depth");
+	Shader* defaultShader = resourceManager->GetShader("default");
+
+	//			Depth map rendering
+	mFbo->Bind();
+	depthShader->Bind();
+	RenderObjects(depthShader, depthProj, depthView, false);
+	mFbo->Unbind();
+
+	//			World rendering
+	defaultShader->Bind();
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, mFbo->textureID);
+	glUniform1i(defaultShader->GetUniformLocation("shadowMap"), 1);
+
+	GLuint depthMVPLocation = defaultShader->GetUniformLocation("depthMVP");
+	glUniformMatrix4fv(depthMVPLocation, 1, GL_FALSE, &(depthProj * depthView)[0][0]);
+
+	RenderObjects(defaultShader, mProjection, mCamera->GetView(), true);
 	
 
-	glm::mat4 view = mCamera->GetView();
-	terrain->Render(mProjection, view);
+	mGui->Render();
+}
+
+void World::RenderObjects(Shader* shader, glm::mat4 projection, glm::mat4 view, bool renderTerrain)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (renderTerrain)
+		terrain->Render(projection, view, shader);
 
 	for (std::vector<Object*>::iterator it = mObjects.begin(); it != mObjects.end(); ++it)
 	{
-		(*it)->Render(mProjection, view);
+		(*it)->Render(projection, view, shader);
 	}
-	mGui->Render();
 }
 
 void World::ProcessInput(float deltaTime, GLFWwindow* window)

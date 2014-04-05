@@ -101,21 +101,26 @@ bool Shader::LoadFromFile(const char *pathVertex, const char *pathGeometry, cons
     GLint Result;
     GLint InfoLogLength;
 
-    glGetShaderiv(mFragmentShaderObj, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(mFragmentShaderObj, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    std::vector<char> VertexShaderErrorMessage(InfoLogLength);
-    glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-    fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
+	glGetShaderiv(mVertexShaderObj, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(mVertexShaderObj, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	std::vector<char> VertexShaderErrorMessage(InfoLogLength);
+	glGetShaderInfoLog(mVertexShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+	fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
 
 	if (pathGeometry){
 		glCompileShader(mGeometryShaderObj);
 		glGetShaderiv(mFragmentShaderObj, GL_COMPILE_STATUS, &Result);
 		glGetShaderiv(mFragmentShaderObj, GL_INFO_LOG_LENGTH, &InfoLogLength);
-		std::vector<char> VertexShaderErrorMessage(InfoLogLength);
+		VertexShaderErrorMessage = std::vector<char>(InfoLogLength);
 		glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
 	}
     glCompileShader(mFragmentShaderObj);
+	glGetShaderiv(mFragmentShaderObj, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(mFragmentShaderObj, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	VertexShaderErrorMessage = std::vector<char>(InfoLogLength);
+	glGetShaderInfoLog(mFragmentShaderObj, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+	fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
 
     glAttachShader(mProgram, mVertexShaderObj);
 	if (pathGeometry)
@@ -144,7 +149,10 @@ void Shader::Release()
 
 GLuint Shader::GetUniformLocation(const char *name)
 {
-    return glGetUniformLocation(mProgram, name);
+	GLuint loc = glGetUniformLocation(mProgram, name);
+	/*if (loc == -1)
+		printf("Cannot find uniform location: %s \n", name);*/
+	return loc;
 }
 
 
