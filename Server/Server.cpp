@@ -6,7 +6,8 @@ Server::Server(int port)
 	m_ENetAddress.port = port;
 
 	m_ENetHost = enet_host_create(&m_ENetAddress, 32, 2, 0, 0);
-	printf("The server was created on port %d.\n", port);
+
+	world.Initialize();
 }
 
 Server::~Server()
@@ -16,6 +17,8 @@ Server::~Server()
 
 void Server::Run()
 {
+	std::thread worldThread(&World::Run, world);
+	
 	int counter = 0;
 	ENetEvent event;
 	WorldStatePacket wsp;
@@ -36,20 +39,20 @@ void Server::Run()
 
 			break;
 		case ENET_EVENT_TYPE_RECEIVE:
-			printf("A packet of length %u containing %s was received from %s on channel %u.\n", event.packet->dataLength, event.packet->data, event.peer->data, event.channelID);
-			
+			ProcessPacket(event.packet);
+			enet_packet_destroy(event.packet);
 			break;
 		case ENET_EVENT_TYPE_DISCONNECT:
 			printf("Client %d disconected.\n", event.peer->data);
 			//event.peer->data = NULL;
 			break;
 		}
+
+		WorldStatePacket wsp = world.TakeSnapshot();
 	}
 }
 
 void Server::ProcessPacket(ENetPacket* packet)
 {
 	
-	
-	enet_packet_destroy(packet);
 }

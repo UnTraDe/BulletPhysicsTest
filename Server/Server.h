@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <thread>
 #include <enet/enet.h>
 #include "Packet.h"
 #include "Client.h"
