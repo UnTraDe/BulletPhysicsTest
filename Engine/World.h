@@ -9,6 +9,7 @@
 #include <bullet/btBulletDynamicsCommon.h>
 #include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
+#include "FrameBufferObject.h"
 #include "ResourceManager.h"
 #include "FPSCamera.h"
 #include "Player.h"
@@ -33,9 +34,10 @@ public:
 	int GetObjects() { return objects; };
 
 private:
+	void RenderObjects(Shader* shader, glm::mat4 projection, glm::mat4 view, bool renderTerrain);
 	void ProcessInput(float deltaTime, GLFWwindow* window);
 	void Explode(glm::vec3 pos, float power, float radius);
-
+	
 	Gui* mGui;
 	FPSCamera* mCamera;
 	glm::mat4 mProjection;
@@ -44,6 +46,7 @@ private:
 	double lastShot;
 	int objects;
 	Terrain* terrain;
+	FrameBufferObject* mFbo;
 
 	//Physics
 	btBroadphaseInterface* mBroadphase;

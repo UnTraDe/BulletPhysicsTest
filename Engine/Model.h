@@ -30,21 +30,18 @@ public:
 		mVao = 0;*/
 	}
 
-	void RenderModel(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &pos = glm::vec3(0.0f), const glm::mat4 &model = glm::mat4(1.0f)) {
+	void RenderModel(Shader* shader, const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &pos = glm::vec3(0.0f), const glm::mat4 &model = glm::mat4(1.0f)) {
 		ResourceManager* resources = ResourceManager::GetInstance();
-		Shader *shader = resources->GetShader("default");
 
 		shader->Bind();
 
 		GLuint vpLocation = shader->GetUniformLocation("VP");
 		GLuint modelLocation = shader->GetUniformLocation("Model");
 		GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
-		GLuint colorLocation = shader->GetUniformLocation("normalColor");
 		
 		glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &model[0][0]);
 		glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::translate(-pos))[0][0]);
-		glUniform3fv(colorLocation, 1, &(glm::vec3(0.5f, 0.5f, 0.5f))[0]);
 
 		glBindVertexArray(mVao);
 
@@ -63,7 +60,7 @@ public:
 		std::string header;
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec3> normals;
-		std::vector<Vertex> realVertices;
+		std::vector<TexturedVertex> realVertices;
 
 		while (file >> header) {
 			if (header == "#")
@@ -99,9 +96,9 @@ public:
 				n2 = atoi(b.substr(b.find_last_of('/') + 1, b.length() - b.find_last_of('/')).c_str()) - 1;
 				n3 = atoi(c.substr(c.find_last_of('/') + 1, c.length() - c.find_last_of('/')).c_str()) - 1;
 
-				realVertices.push_back(Vertex{ vertices[v1], normals[n1] });
-				realVertices.push_back(Vertex{ vertices[v2], normals[n2] });
-				realVertices.push_back(Vertex{ vertices[v3], normals[n3] });
+				realVertices.push_back(TexturedVertex{ vertices[v1], normals[n1], glm::vec2(0,0) });
+				realVertices.push_back(TexturedVertex{ vertices[v2], normals[n2], glm::vec2(0, 0) });
+				realVertices.push_back(TexturedVertex{ vertices[v3], normals[n3], glm::vec2(0, 0) });
 				model->count += 3;
 			}
 		}
@@ -110,16 +107,18 @@ public:
 
 		glGenBuffers(1, &model->mVbo);
 		glBindBuffer(GL_ARRAY_BUFFER, model->mVbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * realVertices.size(), &realVertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * realVertices.size(), &realVertices[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		glGenVertexArrays(1, &model->mVao);
 		glBindVertexArray(model->mVao);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, model->mVbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void*) 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void*) 12);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, (void*) 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 32, (void*) 12);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, (void*) 24);
 		glBindVertexArray(0);
 		
 		return model;

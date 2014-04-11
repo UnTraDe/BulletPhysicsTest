@@ -143,14 +143,12 @@ Terrain::Terrain(const int size)
 	glBindVertexArray(mVao);
 
 	mTextureId = ResourceManager::GetInstance()->GetTexture("grass");
-	Shader *shader = ResourceManager::GetInstance()->GetShader("terrain");
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glUniform1i(mTextureId, shader->GetUniformLocation("textSampler"));
-
+	
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, mVbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
@@ -199,19 +197,23 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::Render(const glm::mat4 &projection, const glm::mat4 &view)
+void Terrain::Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader)
 {
 	ResourceManager* resources = ResourceManager::GetInstance();
-	Shader *shader = resources->GetShader("terrain");
 
 	shader->Bind();
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mTextureId);
-	glUniform1i(mTextureId, shader->GetUniformLocation("textSampler"));
+	glUniform1i(shader->GetUniformLocation("textureMap"), 0);
+	
+	GLuint vpLocation = shader->GetUniformLocation("VP");
+	GLuint modelLocation = shader->GetUniformLocation("Model");
+	GLuint invTranLocation = shader->GetUniformLocation("InversedTransform");
 
-	GLuint mvpLocation = shader->GetUniformLocation("MVP");
-
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &(projection * view * glm::mat4(1.0f))[0][0]);
+	glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &(projection * view)[0][0]);
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &(glm::mat4(1.0f))[0][0]);
+	glUniformMatrix4fv(invTranLocation, 1, GL_FALSE, &(glm::mat4(1.0))[0][0]);
 
 	glBindVertexArray(mVao);
 

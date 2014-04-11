@@ -35,8 +35,8 @@ int main(int argc, char const *argv[])
 	glClearColor(0.53, 0.81, 0.98, 1);
 	
 	ResourceManager::CreateInstance();
-
-	World* world = new World(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 10000.0f));
+	
+	World* world = new World(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 1000.0f));
 	world->Initialize();
 	int frames = 0;
 	double lastFrame = glfwGetTime();

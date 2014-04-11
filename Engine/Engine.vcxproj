@@ -100,6 +100,7 @@
     <ClInclude Include="Crate.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="FPSCamera.h" />
+    <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="InputManager.h" />
@@ -116,6 +117,8 @@
   <ItemGroup>
     <None Include="resources\shaders\default.frag" />
     <None Include="resources\shaders\default.vert" />
+    <None Include="resources\shaders\depth.frag" />
+    <None Include="resources\shaders\depth.vert" />
     <None Include="resources\shaders\simple.frag" />
     <None Include="resources\shaders\simple.vert" />
     <None Include="resources\shaders\textured.frag" />

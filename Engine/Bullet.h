@@ -9,7 +9,7 @@ public:
 	~Bullet();
 
 	void Update(float deltaTime);
-	void Render(const glm::mat4 &projection, const glm::mat4 &view);
+	void Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader);
 	bool IsAlive() { return age < 60 * 2; }
 private:
 	int age = 0;

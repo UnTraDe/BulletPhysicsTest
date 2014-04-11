@@ -122,6 +122,9 @@
     <ClInclude Include="ObjectModel.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="FrameBufferObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\default.frag">
@@ -144,6 +147,12 @@
     </None>
     <None Include="resources\models\MetalBarrel.obj">
       <Filter>Resource Files\Models</Filter>
+    </None>
+    <None Include="resources\shaders\depth.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\depth.vert">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

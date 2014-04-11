@@ -26,7 +26,7 @@ void ObjectModel::Update(float deltaTime)
 
 }
 
-void ObjectModel::Render(const glm::mat4 &projection, const glm::mat4 &view)
+void ObjectModel::Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader)
 {
 	btTransform trans;
 	mRigidBody->getMotionState()->getWorldTransform(trans);
@@ -34,5 +34,5 @@ void ObjectModel::Render(const glm::mat4 &projection, const glm::mat4 &view)
 	glm::mat4 m;
 	trans.getOpenGLMatrix((btScalar*) &m);
 
-	model->RenderModel(projection, view, this->GetPosition(), m);
+	model->RenderModel(shader, projection, view, this->GetPosition(), m);
 }

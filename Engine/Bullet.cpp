@@ -112,10 +112,9 @@ void Bullet::Update(float deltaTime)
 	age++;
 }
 
-void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view)
+void Bullet::Render(const glm::mat4 &projection, const glm::mat4 &view, Shader* shader)
 {
 	ResourceManager* resources = ResourceManager::GetInstance();
-	Shader *shader = resources->GetShader("default");
 
 	shader->Bind();
 	GLuint vpLocation = shader->GetUniformLocation("VP");
