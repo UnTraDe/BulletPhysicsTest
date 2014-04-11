@@ -1,7 +1,7 @@
 #pragma once
 
 #define PACKET_WORLD_STATE 1
-
+#define PACKET_SPAWN_OBJECT 2
 
 class Packet
 {
